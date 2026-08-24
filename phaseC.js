@@ -13,14 +13,34 @@
   };
   const key='mma-rpg-class',appliedKey='mma-rpg-applied-class';
   const savedClass=()=>localStorage.getItem(key)||'Warrior';
-  const sheet=id=>`<svg class="phasec-sprite"><use href="assets/sprite-sheet-32.svg#${id}"></use></svg>`;
-  const model=id=>`<svg class="hero-model"><use href="assets/hero-class-models.svg#${id}"></use></svg>`;
+  const currentWeapon=()=>WEAPONS[localStorage.getItem('mma-rpg-class-weapon')]||WEAPONS[CLASSES[savedClass()].weapon];
+  const model=id=>`<svg class="hero-model" viewBox="0 0 128 160" preserveAspectRatio="xMidYMid meet"><use href="assets/hero-class-models.svg#${id}"></use></svg>`;
+  const sheet=id=>`<svg class="phasec-sprite" viewBox="0 0 32 32"><use href="assets/sprite-sheet-32.svg#${id}"></use></svg>`;
+
   function saveStateAndReload(cls,weaponKey){
     document.getElementById('saveBtn')?.click();const now=localStorage.getItem('mma-rpg-save');if(!now)return;
-    try{const s=JSON.parse(now),oldName=localStorage.getItem(appliedKey),old=oldName?CLASSES[oldName]:null,c=CLASSES[cls],w=WEAPONS[weaponKey];s.hero=s.hero||{};for(const k of ['str','agi','int','vit'])s.hero[k]=(s.hero[k]||0)-(old?.stats[k]||0)+(c.stats[k]||0);s.inventory=s.inventory||[];s.inventory=s.inventory.filter(x=>!String(x.id).startsWith('class_'));s.inventory.push({id:w.id,name:w.name,type:'Weapon',rarity:w.rarity,atk:w.atk,str:w.str||0,agi:w.agi||0,int:w.int||0,crit:w.crit||0,icon:w.icon,class:cls});s.equipment=s.equipment||{};s.equipment.Weapon=w.id;localStorage.setItem('mma-rpg-save',JSON.stringify(s));localStorage.setItem(key,cls);localStorage.setItem(appliedKey,cls);localStorage.setItem('mma-rpg-class-weapon',weaponKey);location.reload()}catch(e){console.error('Phase C class switch failed',e)}}
-  function installPanel(){const host=document.getElementById('characterView');if(!host||host.querySelector('.phasec-panel'))return;const current=savedClass(),panel=document.createElement('div');panel.className='panel inner phasec-panel';panel.innerHTML=`<h3>⚔ Hero Class & Weapon</h3><p class="muted">เลือกอาชีพเพื่อเปลี่ยนโมเดลตัวละคร อาวุธ และค่าสถานะจริง</p><div class="phasec-classes">${Object.entries(CLASSES).map(([id,c])=>`<button class="phasec-class ${id===current?'selected':''}" data-class="${id}">${model(c.model)}<b>${c.label}</b><small>${c.desc}</small><span>${WEAPONS[c.weapon].name}</span></button>`).join('')}</div><div class="phasec-note">32×32 Runtime Sprite + Character Model • 4 Classes • 4 Signature Weapons</div>`;host.prepend(panel);panel.addEventListener('click',e=>{const b=e.target.closest('[data-class]');if(b)saveStateAndReload(b.dataset.class,CLASSES[b.dataset.class].weapon)})}
-  function replaceHeroSprites(){const c=CLASSES[savedClass()]||CLASSES.Warrior;document.querySelectorAll('.sprite-hero,.player-sprite,.character-sprite').forEach(el=>{const u=el.querySelector('use');if(u)u.setAttribute('href',`assets/hero-class-models.svg#${c.model}`);el.classList.add('class-model-active')})}
-  function replaceWeaponIcon(){const k=localStorage.getItem('mma-rpg-class-weapon'),w=WEAPONS[k];if(!w)return;document.querySelectorAll('.equip-slot .sprite').forEach(el=>{const text=el.closest('.equip-slot')?.textContent||'';if(text.includes(w.name)){const u=el.querySelector('use');if(u)u.setAttribute('href',`assets/sprite-sheet-32.svg#${w.icon}`)}})}
-  function tick(){installPanel();replaceHeroSprites();replaceWeaponIcon()}
-  window.addEventListener('load',()=>{setTimeout(tick,300);setInterval(tick,500)})
+    try{const s=JSON.parse(now),oldName=localStorage.getItem(appliedKey),old=oldName?CLASSES[oldName]:null,c=CLASSES[cls],w=WEAPONS[weaponKey];
+      s.hero=s.hero||{};for(const k of ['str','agi','int','vit'])s.hero[k]=(s.hero[k]||0)-(old?.stats[k]||0)+(c.stats[k]||0);
+      s.inventory=s.inventory||[];s.inventory=s.inventory.filter(x=>!String(x.id).startsWith('class_'));
+      s.inventory.push({id:w.id,name:w.name,type:'Weapon',rarity:w.rarity,atk:w.atk,str:w.str||0,agi:w.agi||0,int:w.int||0,crit:w.crit||0,icon:w.icon,class:cls});
+      s.equipment=s.equipment||{};s.equipment.Weapon=w.id;
+      localStorage.setItem('mma-rpg-save',JSON.stringify(s));localStorage.setItem(key,cls);localStorage.setItem(appliedKey,cls);localStorage.setItem('mma-rpg-class-weapon',weaponKey);location.reload();
+    }catch(e){console.error('Phase C class switch failed',e)}}
+
+  function installPanel(){
+    const host=document.getElementById('characterView');if(!host||host.querySelector('.phasec-panel'))return;
+    const current=savedClass(),c=CLASSES[current],w=currentWeapon(),panel=document.createElement('div');panel.className='panel inner phasec-panel';
+    panel.innerHTML=`<div class="phasec-heading"><div><h3>⚔ Hero Class & Weapon</h3><p class="muted">เลือกอาชีพเพื่อเปลี่ยนโมเดลตัวละคร อาวุธ และค่าสถานะจริง</p></div><div class="phasec-current">${model(c.model)}<b>${c.label}</b><span>${w.name}</span></div></div><div class="phasec-classes">${Object.entries(CLASSES).map(([id,x])=>`<button class="phasec-class ${id===current?'selected':''}" data-class="${id}">${model(x.model)}<b>${x.label}</b><small>${x.desc}</small><em>${WEAPONS[x.weapon].name}</em></button>`).join('')}</div><div class="phasec-note">32×32 Runtime Sprite + Character Model • 4 Classes • 4 Signature Weapons • World / Battle / Character / Equipment</div>`;
+    host.prepend(panel);panel.addEventListener('click',e=>{const b=e.target.closest('[data-class]');if(b)saveStateAndReload(b.dataset.class,CLASSES[b.dataset.class].weapon)})}
+
+  function replaceHeroSprites(){
+    const c=CLASSES[savedClass()]||CLASSES.Warrior,source='assets/hero-class-models.svg';
+    document.querySelectorAll('.sprite-hero,.player-sprite,.character-sprite').forEach(el=>{const u=el.querySelector('use');if(u){u.setAttribute('href',`${source}#${c.model}`);u.setAttribute('href',`${source}#${c.model}`)}el.classList.add('class-model-active',`class-${savedClass().toLowerCase()}`)});
+    document.documentElement.dataset.heroClass=savedClass();
+    const paper=document.querySelector('.paperdoll');if(paper)paper.dataset.class=savedClass();
+  }
+  function replaceWeaponIcon(){const w=currentWeapon();document.querySelectorAll('.equip-slot .sprite').forEach(el=>{const text=el.closest('.equip-slot')?.textContent||'';const u=el.querySelector('use');if(u&&text.includes(w.name))u.setAttribute('href',`assets/sprite-sheet-32.svg#${w.icon}`)})}
+  function updateLabels(){const c=CLASSES[savedClass()]||CLASSES.Warrior,w=currentWeapon();document.querySelectorAll('[data-hero-class-label]').forEach(el=>el.textContent=c.label);document.querySelectorAll('[data-hero-weapon-label]').forEach(el=>el.textContent=w.name)}
+  function tick(){installPanel();replaceHeroSprites();replaceWeaponIcon();updateLabels()}
+  window.addEventListener('load',()=>{setTimeout(tick,300);setInterval(tick,400)});
 })();
