@@ -1,47 +1,39 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MMA : RPG</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MMA : RPG — Single Player</title><link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="app">
-    <header class="topbar">
-      <div><h1>MMA : RPG</h1><span>Single-player equipment & combat lab</span></div>
-      <button id="resetBtn" class="danger">Reset</button>
-    </header>
-    <nav class="tabs">
-      <button data-tab="battle" class="active">Battle</button>
-      <button data-tab="character">Character</button>
-      <button data-tab="inventory">Inventory</button>
-      <button data-tab="equipment">Equipment</button>
-      <button data-tab="stats">Stats</button>
-      <button data-tab="loot">Loot</button>
-    </nav>
-
-    <section id="battle" class="tab active">
-      <div class="grid two">
-        <article class="panel hero-panel">
-          <h2>Hero</h2><div id="heroCard"></div>
-          <div class="hp"><div id="heroHpBar"></div></div>
-          <div class="actions"><button id="attackBtn" class="primary">Attack</button><button id="healBtn">Heal</button></div>
-        </article>
-        <article class="panel">
-          <h2>Monster</h2><div id="monsterCard"></div>
-          <div class="hp"><div id="monsterHpBar"></div></div>
-          <div id="combatLog" class="log"></div>
-        </article>
-      </div>
-    </section>
-
-    <section id="character" class="tab"><div class="panel"><h2>Character</h2><div id="characterView"></div></div></section>
-    <section id="inventory" class="tab"><div class="panel"><h2>Inventory</h2><div id="inventoryView" class="items"></div></div></section>
-    <section id="equipment" class="tab"><div class="panel"><h2>Equipment</h2><div id="equipmentView" class="equip-grid"></div></div></section>
-    <section id="stats" class="tab"><div class="panel"><h2>Derived Stats</h2><div id="statsView" class="stat-grid"></div></div></section>
-    <section id="loot" class="tab"><div class="panel"><h2>Loot Laboratory</h2><p>Defeat monsters to test drop tables. Loot can be equipped directly from Inventory.</p><div id="lootView" class="items"></div></div></section>
-  </main>
-  <script src="game.js"></script>
-</body>
-</html>
+<div class="shell">
+<header class="top">
+  <div class="brand"><div class="crest">⚔</div><div><h1>MMA : RPG</h1><p>Single-player RPG • Equipment & Damage Laboratory</p></div></div>
+  <div class="top-actions"><button id="saveBtn">💾 Save</button><button id="loadBtn">↻ Load</button><button id="resetBtn" class="danger">Reset</button></div>
+</header>
+<nav class="tabs">
+<button class="active" data-tab="battle">⚔ Battle</button><button data-tab="character">👤 Character</button><button data-tab="inventory">🎒 Inventory</button><button data-tab="equipment">🛡 Equipment</button><button data-tab="stats">📊 Stats</button><button data-tab="monsters">👹 Monsters</button><button data-tab="loot">🎁 Loot</button><button data-tab="lab">🧪 GM Lab</button>
+</nav>
+<main>
+<section id="battle" class="tab active">
+<div class="scene panel">
+  <div class="scene-bg"></div>
+  <div class="unit hero-unit"><div class="unit-name">Hero <span id="heroLevel"></span></div><img src="assets/hero.svg"><div class="bar"><i id="heroHpBar"></i></div><small id="heroHpText"></small></div>
+  <div class="vs">VS</div>
+  <div class="unit monster-unit"><div class="unit-name" id="monsterName"></div><img id="monsterImage" src="assets/goblin.svg"><div class="bar enemy"><i id="monsterHpBar"></i></div><small id="monsterHpText"></small></div>
+</div>
+<div class="battle-grid">
+ <div class="panel command"><h2>Combat</h2><div class="combat-buttons"><button id="attackBtn" class="primary big">⚔ Attack</button><button id="healBtn">✨ Heal</button><button id="potionBtn">🧪 Potion</button></div><div class="hint">Click Attack to test the current equipment and damage formula.</div></div>
+ <div class="panel"><h2>Damage Breakdown</h2><div id="damageBreakdown" class="stats"></div></div>
+ <div class="panel log-panel"><h2>Battle Log</h2><div id="combatLog" class="log"></div></div>
+</div>
+</section>
+<section id="character" class="tab"><div class="panel"><h2>Character</h2><div id="characterView"></div></div></section>
+<section id="inventory" class="tab"><div class="panel"><div class="section-head"><h2>Inventory</h2><span id="slotCount" class="badge"></span></div><div class="filters"><button class="filter active" data-filter="All">All</button><button class="filter" data-filter="Weapon">Weapon</button><button class="filter" data-filter="Armor">Armor</button><button class="filter" data-filter="Ring">Accessory</button><button class="filter" data-filter="Consumable">Consumable</button></div><div id="inventoryView" class="cards"></div></div></section>
+<section id="equipment" class="tab"><div class="panel"><h2>Equipment</h2><div class="equipment-layout"><div class="paperdoll"><img src="assets/hero.svg"></div><div id="equipmentView" class="equip-grid"></div><div class="panel inner"><h3>Total Stats</h3><div id="equipStats" class="stats"></div></div></div></div></section>
+<section id="stats" class="tab"><div class="panel"><h2>Stats & Formula</h2><div id="statsView" class="stats bigstats"></div><div class="formula"><h3>Current Damage Formula</h3><code id="formulaText"></code><p>Random factor, Critical, Hit and Defense are intentionally visible for testing.</p></div></div></section>
+<section id="monsters" class="tab"><div class="panel"><h2>Monster Encyclopedia</h2><div id="monsterView" class="cards"></div></div></section>
+<section id="loot" class="tab"><div class="panel"><h2>Loot Laboratory</h2><p class="muted">Defeat enemies to populate the drop history.</p><div id="lootView" class="cards"></div></div></section>
+<section id="lab" class="tab"><div class="panel"><h2>🧪 GM / Test Lab</h2><p class="muted">Create test equipment instantly. Nothing is sent to a server; save data stays in this browser.</p><div class="lab-grid"><div class="panel inner"><h3>Create Weapon</h3><label>Name<input id="gmName" value="Test Sword"></label><label>ATK<input id="gmAtk" type="number" value="50"></label><label>DEF<input id="gmDef" type="number" value="0"></label><label>STR<input id="gmStr" type="number" value="10"></label><button id="gmAddBtn" class="primary">Create Item</button></div><div class="panel inner"><h3>Quick Tests</h3><button id="fullHealBtn">Restore HP/MP</button><button id="spawnBtn">Spawn Random Monster</button><button id="levelBtn">+1 Level</button><button id="goldBtn">+1,000 Gold</button></div></div></div></section>
+</main>
+<footer>MMA : RPG • Original single-player prototype • ทดลองอาวุธและของสวมใส่</footer>
+</div><script src="game.js"></script></body></html>
