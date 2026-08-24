@@ -1,0 +1,8 @@
+{
+  "version":"phase-c-1.0",
+  "grid":{"cell":32,"format":"SVG symbol sheet","sheet":"assets/sprite-sheet-32.svg"},
+  "heroClasses":{"Warrior":{"idle":"warrior_idle","attack":"warrior_attack","weapon":"sword_long"},"Ranger":{"idle":"ranger_idle","attack":"ranger_attack","weapon":"bow"},"Mage":{"idle":"mage_idle","attack":"mage_cast","weapon":"staff"},"Assassin":{"idle":"assassin_idle","attack":"assassin_attack","weapon":"dual_blade"}},
+  "equipment":{"weapons":["sword_long","bow","staff","dual_blade"],"armor":["leather","knight","mage_robe","shadow_armor"],"accessories":["ring"]},
+  "items":["potion"],
+  "runtime":{"loader":"phaseC.js","animation":"animation.js","entry":"index.html"}
+}
