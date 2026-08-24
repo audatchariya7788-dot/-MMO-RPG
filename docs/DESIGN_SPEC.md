@@ -27,39 +27,19 @@ MAIN MENU
 
 ```text
 assets/
-├── backgrounds/
-│   ├── main-menu.svg
-│   ├── loading.svg
-│   ├── town.svg
-│   └── forest.svg
-├── characters/
-│   ├── hero_idle.svg
-│   ├── hero_walk.svg
-│   ├── hero_attack.svg
-│   ├── hero_hurt.svg
-│   └── hero_dead.svg
-├── monsters/
-│   ├── goblin.svg
-│   ├── wolf.svg
-│   ├── golem.svg
-│   └── knight.svg
-├── items/
-│   ├── sword.svg
-│   ├── armor.svg
-│   ├── ring.svg
-│   └── potion.svg
-├── effects/
-│   ├── slash.svg
-│   ├── critical.svg
-│   └── heal.svg
-├── ui/
-│   ├── panel.svg
-│   ├── button.svg
-│   └── inventory.svg
-└── sprites.svg
+├── main-menu.svg
+├── sprites.svg
+├── animation-sprites.svg
+├── greenvale-map.svg
+├── effects.svg
+├── hero.svg
+├── goblin.svg
+├── wolf.svg
+├── golem.svg
+└── knight.svg
 ```
 
-If an asset is not available yet, the game must use a generated placeholder rather than break the page.
+The runtime uses original SVG artwork and graceful fallbacks. Animation frames are stored as reusable SVG symbols in `animation-sprites.svg`; the Greenvale world artwork is provided by `greenvale-map.svg`.
 
 ## 3. Screens
 
@@ -73,14 +53,16 @@ If an asset is not available yet, the game must use a generated placeholder rath
 
 ### World
 - Tile-based map
+- Pixel-style Greenvale background artwork
 - Player position
 - NPC positions
 - Walkable/non-walkable tiles
 - Encounter zones
+- WASD/Arrow movement
 
 ### Battle
-- Player sprite
-- Monster sprite
+- Animated player sprite
+- Animated monster sprite
 - HP/MP bars
 - Action buttons
 - Battle log
@@ -185,12 +167,14 @@ The exact coefficients remain configurable so the GM/Test Lab can be used to exp
 - [x] Save/load
 
 ### Phase B — Visual Upgrade
-- [ ] Full pixel-art tile map
-- [ ] Hero idle/walk/attack/hurt/dead animations
-- [ ] Monster animations
-- [ ] Skill VFX
-- [ ] UI skin
-- [ ] Loading screen artwork
+- [x] Pixel-style Greenvale world artwork
+- [x] Hero idle/walk/attack/hurt/dead animation symbols
+- [x] Monster idle/attack animation symbols
+- [x] Runtime animation controller
+- [x] Existing combat VFX integration
+- [x] Loading screen artwork
+- [ ] Full authored tile collision map
+- [ ] Final UI skin pass
 
 ### Phase C — RPG Depth
 - [ ] Full item database
@@ -222,7 +206,7 @@ The exact coefficients remain configurable so the GM/Test Lab can be used to exp
 
 ## 9. Current Runtime Entry
 
-The browser entry point is `index.html`. The active gameplay runtime should be loaded from `app.js`. Legacy files may remain temporarily for reference but must not become a second source of truth.
+The browser entry point is `index.html`. The active gameplay runtime is loaded from `app.js`, followed by `animation.js` for visual animation. Legacy files may remain temporarily for reference but must not become a second source of truth.
 
 ## 10. Acceptance Criteria
 
