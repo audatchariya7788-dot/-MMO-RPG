@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MMA : RPG</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div><h1>MMA : RPG</h1><span>Single-player equipment & combat lab</span></div>
+      <button id="resetBtn" class="danger">Reset</button>
+    </header>
+    <nav class="tabs">
+      <button data-tab="battle" class="active">Battle</button>
+      <button data-tab="character">Character</button>
+      <button data-tab="inventory">Inventory</button>
+      <button data-tab="equipment">Equipment</button>
+      <button data-tab="stats">Stats</button>
+      <button data-tab="loot">Loot</button>
+    </nav>
+
+    <section id="battle" class="tab active">
+      <div class="grid two">
+        <article class="panel hero-panel">
+          <h2>Hero</h2><div id="heroCard"></div>
+          <div class="hp"><div id="heroHpBar"></div></div>
+          <div class="actions"><button id="attackBtn" class="primary">Attack</button><button id="healBtn">Heal</button></div>
+        </article>
+        <article class="panel">
+          <h2>Monster</h2><div id="monsterCard"></div>
+          <div class="hp"><div id="monsterHpBar"></div></div>
+          <div id="combatLog" class="log"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="character" class="tab"><div class="panel"><h2>Character</h2><div id="characterView"></div></div></section>
+    <section id="inventory" class="tab"><div class="panel"><h2>Inventory</h2><div id="inventoryView" class="items"></div></div></section>
+    <section id="equipment" class="tab"><div class="panel"><h2>Equipment</h2><div id="equipmentView" class="equip-grid"></div></div></section>
+    <section id="stats" class="tab"><div class="panel"><h2>Derived Stats</h2><div id="statsView" class="stat-grid"></div></div></section>
+    <section id="loot" class="tab"><div class="panel"><h2>Loot Laboratory</h2><p>Defeat monsters to test drop tables. Loot can be equipped directly from Inventory.</p><div id="lootView" class="items"></div></div></section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
