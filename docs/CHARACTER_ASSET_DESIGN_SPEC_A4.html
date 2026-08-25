@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MMA : RPG — Character Asset Design Spec</title>
+<style>
+@page{size:A4;margin:12mm}*{box-sizing:border-box}body{font-family:Arial,'Noto Sans Thai',sans-serif;color:#10233a;margin:0;font-size:11px;line-height:1.45}h1{font-size:25px;margin:0;color:#0b3b72}h2{font-size:15px;margin:13px 0 6px;color:#0b4d8d;border-bottom:1px solid #b8cbe0;padding-bottom:3px}h3{font-size:12px;margin:7px 0 4px}.meta{display:flex;justify-content:space-between;border-bottom:2px solid #0b4d8d;padding:5px 0 9px;margin-bottom:8px}.flow{display:flex;gap:5px;align-items:center;justify-content:center;margin:9px 0}.box{border:1px solid #3175ad;border-radius:7px;padding:7px;text-align:center;background:#f3f8fd;min-width:110px;font-weight:700}.arrow{font-size:18px;color:#d39b22}table{width:100%;border-collapse:collapse;font-size:9px}th,td{border:1px solid #aabdd0;padding:4px;vertical-align:top}th{background:#e9f2fa;text-align:left}code{font-family:Consolas,monospace;background:#f1f4f7;padding:1px 3px;border-radius:3px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.panel{border:1px solid #c2d2e1;border-radius:6px;padding:7px;background:#fbfdff}.mono{font-family:Consolas,monospace;white-space:pre-wrap;font-size:8.5px;line-height:1.35}.check{font-size:9.5px}.footer{margin-top:10px;border-top:1px solid #b8cbe0;padding-top:5px;font-size:8.5px;color:#536b82}
+</style>
+</head>
+<body>
+<div class="meta"><div><h1>MMA : RPG</h1><b>Character Asset → Sprite 32×32 → Equipment → Character UI → Battle</b></div><div>Phase C • v1.2<br>2026-08-25</div></div>
+<div class="flow"><div class="box">01<br>Character Asset</div><div class="arrow">→</div><div class="box">02<br>Sprite Sheet 32×32</div><div class="arrow">→</div><div class="box">03<br>Equipment Data</div><div class="arrow">→</div><div class="box">04<br>Character UI</div><div class="arrow">→</div><div class="box">05<br>Battle Runtime</div></div>
+<h2>1. Repository Asset Map</h2>
+<div class="panel mono">-MMO-RPG/
+├─ index.html                 [04] UI + script entry
+├─ app.js                     [05] game state / combat
+├─ animation.js               [05] animation / effects
+├─ phaseC.js                  [01–05] character integration
+├─ phaseC.css                 [04] Character + Equipment UI
+└─ assets/
+   ├─ hero-warrior.svg        [01] Warrior
+   ├─ hero-ranger.svg         [01] Ranger
+   ├─ hero-mage.svg           [01] Mage
+   ├─ hero-assassin.svg       [01] Assassin
+   ├─ hero-class-models.svg   [01] legacy model sheet
+   ├─ sprite-sheet-32.svg     [02] 32×32 runtime symbols
+   ├─ asset-manifest.json     [01–05] asset contract
+   ├─ animation-sprites.svg   [05]
+   ├─ effects.svg             [05]
+   ├─ hero.svg                [01] fallback
+   └─ knight.svg              [03] armor reference</div>
+<h2>2. Code Connection</h2>
+<table><tr><th>ID</th><th>File / ID</th><th>Connection</th><th>Screen</th></tr>
+<tr><td>01</td><td><code>assets/hero-*.svg</code></td><td>Standalone class models loaded by <code>phaseC.js</code></td><td>Character</td></tr>
+<tr><td>02</td><td><code>assets/sprite-sheet-32.svg</code></td><td>32×32 symbol IDs for equipment and runtime icons</td><td>Character / Equipment</td></tr>
+<tr><td>03</td><td><code>CLASSES</code>, <code>WEAPONS</code></td><td>Class → weapon → stats/bonuses</td><td>Character / Stats / Battle</td></tr>
+<tr><td>04</td><td><code>#characterView</code></td><td><code>phaseC.js</code> mounts the complete Character UI</td><td>Character</td></tr>
+<tr><td>05</td><td><code>#battle</code>, <code>.sprite-hero</code></td><td>Active class state is synchronized with combat</td><td>Battle</td></tr></table>
+<h2>3. Class Contract</h2>
+<table><tr><th>Class</th><th>Model</th><th>Weapon</th><th>Build</th></tr>
+<tr><td>Warrior</td><td>hero-warrior.svg</td><td>sword_long</td><td>STR / VIT</td></tr><tr><td>Ranger</td><td>hero-ranger.svg</td><td>bow</td><td>AGI / CRIT</td></tr><tr><td>Mage</td><td>hero-mage.svg</td><td>staff</td><td>INT / MP</td></tr><tr><td>Assassin</td><td>hero-assassin.svg</td><td>dual_blade</td><td>AGI / SPD</td></tr></table>
+<div class="grid"><div><h2>4. Character UI</h2><div class="panel mono">Hero Class & Weapon
+[Warrior] [Ranger] [Mage] [Assassin]
+
+┌────────────┬──────────────┬───────────┐
+│ Hero Model │ Equipment    │ Stats     │
+│            │ Head / Armor │ HP / MP   │
+│            │ Ring / Weapon│ STR AGI   │
+│ Weapon     │ ATK + Bonus  │ INT VIT   │
+└────────────┴──────────────┴───────────┘</div></div>
+<div><h2>5. Runtime Rules</h2><div class="panel check">☐ One active class in localStorage<br>☐ Model, weapon and stats update together<br>☐ Character and Battle use same state<br>☐ Missing hero SVG falls back to <code>hero.svg</code><br>☐ Missing equipment symbol remains usable<br>☐ Hard refresh after asset updates</div></div></div>
+<h2>6. Test Procedure</h2>
+<div class="panel mono">git pull --ff-only origin main
+chmod +x run.sh
+bash run.sh
+→ Open Codespaces Port 8000
+→ Character → Warrior / Ranger / Mage / Assassin
+→ Equipment → verify 32×32 icons
+→ Battle → verify active class remains synchronized</div>
+<div class="footer">MMA : RPG • Single-player adventure & combat laboratory • This A4 sheet is an implementation guide, not a copy of another game's proprietary assets.</div>
+</body></html>
