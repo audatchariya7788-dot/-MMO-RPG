@@ -1,46 +1,72 @@
 (() => {
   const CLASSES={
-    Warrior:{label:'Warrior',desc:'สมดุล เน้น STR/DEF',sprite:'warrior_idle',model:'warrior',weapon:'long_sword',stats:{str:4,agi:1,int:0,vit:3}},
-    Ranger:{label:'Ranger',desc:'ความเร็วและคริติคอล',sprite:'ranger_idle',model:'ranger',weapon:'bow',stats:{str:1,agi:5,int:1,vit:1}},
-    Mage:{label:'Mage',desc:'เวทมนตร์และ MP',sprite:'mage_idle',model:'mage',weapon:'staff',stats:{str:0,agi:1,int:6,vit:1}},
-    Assassin:{label:'Assassin',desc:'AGI สูง โจมตีเร็ว',sprite:'assassin_idle',model:'assassin',weapon:'dual_blade',stats:{str:2,agi:6,int:0,vit:0}}
+    Warrior:{label:'Warrior',desc:'สมดุล เน้น STR/DEF',model:'warrior',weapon:'long_sword'},
+    Ranger:{label:'Ranger',desc:'ความเร็วและคริติคอล',model:'ranger',weapon:'bow'},
+    Mage:{label:'Mage',desc:'เวทมนตร์และ MP',model:'mage',weapon:'staff'},
+    Assassin:{label:'Assassin',desc:'AGI สูง โจมตีเร็ว',model:'assassin',weapon:'dual_blade'}
   };
   const WEAPONS={
-    long_sword:{id:'class_long_sword',name:'Long Sword',icon:'sword_long',atk:28,str:6,crit:1,rarity:'Rare'},
-    bow:{id:'class_bow',name:'Hunter Bow',icon:'bow',atk:25,agi:7,crit:4,rarity:'Rare'},
-    staff:{id:'class_staff',name:'Arcane Staff',icon:'staff',atk:20,int:10,crit:2,rarity:'Epic'},
-    dual_blade:{id:'class_dual_blade',name:'Twin Blades',icon:'dual_blade',atk:27,agi:8,crit:5,rarity:'Epic'}
+    long_sword:{name:'Long Sword',icon:'sword_long',atk:28,bonus:'STR +6 • CRIT +1%'},
+    bow:{name:'Hunter Bow',icon:'bow',atk:25,bonus:'AGI +7 • CRIT +4%'},
+    staff:{name:'Arcane Staff',icon:'staff',atk:20,bonus:'INT +10 • CRIT +2%'},
+    dual_blade:{name:'Twin Blades',icon:'dual_blade',atk:27,bonus:'AGI +8 • CRIT +5%'}
   };
-  const key='mma-rpg-class',appliedKey='mma-rpg-applied-class';
+  const key='mma-rpg-class';
   const savedClass=()=>localStorage.getItem(key)||'Warrior';
-  const currentWeapon=()=>WEAPONS[localStorage.getItem('mma-rpg-class-weapon')]||WEAPONS[CLASSES[savedClass()].weapon];
-  const model=id=>`<svg class="hero-model" viewBox="0 0 128 160" preserveAspectRatio="xMidYMid meet"><use href="assets/hero-class-models.svg#${id}"></use></svg>`;
-  const sheet=id=>`<svg class="phasec-sprite" viewBox="0 0 32 32"><use href="assets/sprite-sheet-32.svg#${id}"></use></svg>`;
+  const currentClass=()=>CLASSES[savedClass()]||CLASSES.Warrior;
+  const currentWeapon=()=>WEAPONS[currentClass().weapon];
+  const model=id=>`<svg class="hero-model hero-model-large" viewBox="0 0 128 160" preserveAspectRatio="xMidYMid meet"><use href="assets/hero-class-models.svg#${id}"></use></svg>`;
+  const sheet=id=>`<svg class="phasec-sprite"><use href="assets/sprite-sheet-32.svg#${id}"></use></svg>`;
 
-  function saveStateAndReload(cls,weaponKey){
-    document.getElementById('saveBtn')?.click();const now=localStorage.getItem('mma-rpg-save');if(!now)return;
-    try{const s=JSON.parse(now),oldName=localStorage.getItem(appliedKey),old=oldName?CLASSES[oldName]:null,c=CLASSES[cls],w=WEAPONS[weaponKey];
-      s.hero=s.hero||{};for(const k of ['str','agi','int','vit'])s.hero[k]=(s.hero[k]||0)-(old?.stats[k]||0)+(c.stats[k]||0);
-      s.inventory=s.inventory||[];s.inventory=s.inventory.filter(x=>!String(x.id).startsWith('class_'));
-      s.inventory.push({id:w.id,name:w.name,type:'Weapon',rarity:w.rarity,atk:w.atk,str:w.str||0,agi:w.agi||0,int:w.int||0,crit:w.crit||0,icon:w.icon,class:cls});
-      s.equipment=s.equipment||{};s.equipment.Weapon=w.id;
-      localStorage.setItem('mma-rpg-save',JSON.stringify(s));localStorage.setItem(key,cls);localStorage.setItem(appliedKey,cls);localStorage.setItem('mma-rpg-class-weapon',weaponKey);location.reload();
-    }catch(e){console.error('Phase C class switch failed',e)}}
-
-  function installPanel(){
-    const host=document.getElementById('characterView');if(!host||host.querySelector('.phasec-panel'))return;
-    const current=savedClass(),c=CLASSES[current],w=currentWeapon(),panel=document.createElement('div');panel.className='panel inner phasec-panel';
-    panel.innerHTML=`<div class="phasec-heading"><div><h3>⚔ Hero Class & Weapon</h3><p class="muted">เลือกอาชีพเพื่อเปลี่ยนโมเดลตัวละคร อาวุธ และค่าสถานะจริง</p></div><div class="phasec-current">${model(c.model)}<b>${c.label}</b><span>${w.name}</span></div></div><div class="phasec-classes">${Object.entries(CLASSES).map(([id,x])=>`<button class="phasec-class ${id===current?'selected':''}" data-class="${id}">${model(x.model)}<b>${x.label}</b><small>${x.desc}</small><em>${WEAPONS[x.weapon].name}</em></button>`).join('')}</div><div class="phasec-note">32×32 Runtime Sprite + Character Model • 4 Classes • 4 Signature Weapons • World / Battle / Character / Equipment</div>`;
-    host.prepend(panel);panel.addEventListener('click',e=>{const b=e.target.closest('[data-class]');if(b)saveStateAndReload(b.dataset.class,CLASSES[b.dataset.class].weapon)})}
-
-  function replaceHeroSprites(){
-    const c=CLASSES[savedClass()]||CLASSES.Warrior,source='assets/hero-class-models.svg';
-    document.querySelectorAll('.sprite-hero,.player-sprite,.character-sprite').forEach(el=>{const u=el.querySelector('use');if(u){u.setAttribute('href',`${source}#${c.model}`);u.setAttribute('href',`${source}#${c.model}`)}el.classList.add('class-model-active',`class-${savedClass().toLowerCase()}`)});
-    document.documentElement.dataset.heroClass=savedClass();
-    const paper=document.querySelector('.paperdoll');if(paper)paper.dataset.class=savedClass();
+  function switchClass(cls){
+    localStorage.setItem(key,cls);
+    localStorage.setItem('mma-rpg-class-weapon',CLASSES[cls].weapon);
+    document.documentElement.dataset.heroClass=cls;
+    if(typeof window.save==='function') window.save();
+    if(typeof window.render==='function') window.render();
+    setTimeout(renderCharacterUpgrade,50);
   }
-  function replaceWeaponIcon(){const w=currentWeapon();document.querySelectorAll('.equip-slot .sprite').forEach(el=>{const text=el.closest('.equip-slot')?.textContent||'';const u=el.querySelector('use');if(u&&text.includes(w.name))u.setAttribute('href',`assets/sprite-sheet-32.svg#${w.icon}`)})}
-  function updateLabels(){const c=CLASSES[savedClass()]||CLASSES.Warrior,w=currentWeapon();document.querySelectorAll('[data-hero-class-label]').forEach(el=>el.textContent=c.label);document.querySelectorAll('[data-hero-weapon-label]').forEach(el=>el.textContent=w.name)}
-  function tick(){installPanel();replaceHeroSprites();replaceWeaponIcon();updateLabels()}
-  window.addEventListener('load',()=>{setTimeout(tick,300);setInterval(tick,400)});
+
+  function classCards(current){
+    return Object.entries(CLASSES).map(([id,c])=>`<button class="phasec-class ${id===current?'selected':''}" data-class="${id}">${model(c.model)}<b>${c.label}</b><small>${c.desc}</small><em>${WEAPONS[c.weapon].name}</em></button>`).join('');
+  }
+
+  function renderCharacterUpgrade(){
+    const host=document.getElementById('characterView');
+    if(!host)return;
+    const cls=savedClass(),c=currentClass(),w=currentWeapon();
+    const old=host.querySelector('.phasec-character-complete');
+    const shell=document.createElement('div');
+    shell.className='phasec-character-complete';
+    shell.innerHTML=`
+      <div class="phasec-class-panel">
+        <div class="phasec-heading"><div><h3>⚔ Hero Class & Weapon</h3><p class="muted">โมเดลตัวละครและอาวุธจะเปลี่ยนตามอาชีพที่เลือก และใช้ต่อใน World / Battle / Equipment</p></div><div class="phasec-current">${model(c.model)}<b>${c.label}</b><span>${w.name}</span></div></div>
+        <div class="phasec-classes">${classCards(cls)}</div>
+      </div>
+      <div class="character-showcase">
+        <div class="character-art-card"><div class="pixel-frame"><div class="character-ribbon">${c.label}</div>${model(c.model)}</div><h2>${c.label}</h2><p>${c.desc}</p><div class="weapon-badge">⚔ ${w.name}</div></div>
+        <div class="equipment-paper-card"><h3>🛡 Equipment</h3><div class="paper-grid">
+          <div class="equip-visual empty">HEAD</div><div class="equip-visual armor">ARMOR</div><div class="equip-visual empty">RING</div>
+          <div class="equip-visual weapon">${sheet(w.icon)}<b>${w.name}</b><small>ATK +${w.atk}</small></div><div class="paper-mini">${model(c.model)}</div>
+        </div><div class="equipment-list"><div>⚔ Weapon <b>${w.name}</b></div><div>🛡 Armor <b>Leather Armor</b></div><div>💍 Ring <b>Ruby Ring</b></div></div></div>
+        <div class="character-info-card"><h3>📊 Character</h3><div class="level-line"><b>Adventurer Lv.1</b><span>EXP 0/100</span></div><div class="resource"><span>HP</span><b>240 / 240</b></div><div class="resource"><span>MP</span><b>80 / 80</b></div><div class="attribute-grid"><div>STR <b>28</b></div><div>AGI <b>18</b></div><div>INT <b>12</b></div><div>VIT <b>25</b></div></div><div class="weapon-bonus"><b>${w.name}</b><br>${w.bonus}</div></div>
+      </div>`;
+    host.replaceChildren(shell);
+    shell.addEventListener('click',e=>{const b=e.target.closest('[data-class]');if(b)switchClass(b.dataset.class)});
+  }
+
+  function syncAllHeroModels(){
+    const c=currentClass();
+    document.documentElement.dataset.heroClass=savedClass();
+    document.querySelectorAll('.sprite-hero').forEach(el=>{
+      const u=el.querySelector('use');
+      if(u && el.closest('.characterView,.paperdoll,.hero-unit'))u.setAttribute('href',`assets/hero-class-models.svg#${c.model}`);
+    });
+  }
+
+  function tick(){
+    if(document.getElementById('character')?.classList.contains('active'))renderCharacterUpgrade();
+    syncAllHeroModels();
+  }
+  window.addEventListener('load',()=>{setTimeout(tick,250);setInterval(tick,700)});
 })();
