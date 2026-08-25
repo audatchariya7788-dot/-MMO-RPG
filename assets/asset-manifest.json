@@ -1,10 +1,11 @@
 {
-  "version":"phase-c-1.2",
-  "grid":{"cell":32,"format":"SVG symbol sheet","sheet":"assets/sprite-sheet-32.svg"},
-  "heroModels":{"standalone":["assets/hero-warrior.svg","assets/hero-ranger.svg","assets/hero-mage.svg","assets/hero-assassin.svg"],"legacySheet":"assets/hero-class-models.svg","viewBox":"128x160","classes":{"Warrior":"warrior","Ranger":"ranger","Mage":"mage","Assassin":"assassin"}},
-  "heroClasses":{"Warrior":{"idle":"warrior_idle","attack":"warrior_attack","model":"warrior","weapon":"sword_long"},"Ranger":{"idle":"ranger_idle","attack":"ranger_attack","model":"ranger","weapon":"bow"},"Mage":{"idle":"mage_idle","attack":"mage_cast","model":"mage","weapon":"staff"},"Assassin":{"idle":"assassin_idle","attack":"assassin_attack","model":"assassin","weapon":"dual_blade"}},
-  "equipment":{"weapons":["sword_long","bow","staff","dual_blade"],"armor":["leather","knight","mage_robe","shadow_armor"],"accessories":["ring"]},
-  "items":["potion"],
-  "runtime":{"loader":"phaseC.js","animation":"animation.js","entry":"index.html","characterFallback":"assets/hero.svg"},
-  "docs":{"pipeline":"docs/character-pipeline.svg","designSpecMarkdown":"docs/CHARACTER_ASSET_DESIGN_SPEC.md","designSpecA4":"docs/CHARACTER_ASSET_DESIGN_SPEC_A4.html"}
+  "version":"mma-rpg-v2.1",
+  "grid":{"cell":32,"format":"SVG logical sprite grid","origin":"top-left"},
+  "heroModels":{"standalone":["assets/hero-warrior.svg","assets/hero-ranger.svg","assets/hero-mage.svg","assets/hero-assassin.svg"],"fallback":"assets/hero.svg","classes":{"Warrior":"CHR-WAR-IDLE","Ranger":"CHR-RNG-IDLE","Mage":"CHR-MAG-IDLE","Assassin":"CHR-ASS-IDLE"}},
+  "heroClasses":{"Warrior":{"assetId":"CHR-WAR-IDLE","asset":"assets/hero-warrior.svg","weaponId":"EQ-WPN-LONG-SWORD","weaponSprite":"sword"},"Ranger":{"assetId":"CHR-RNG-IDLE","asset":"assets/hero-ranger.svg","weaponId":"EQ-WPN-HUNTER-BOW","weaponSprite":"bow"},"Mage":{"assetId":"CHR-MAG-IDLE","asset":"assets/hero-mage.svg","weaponId":"EQ-WPN-ARCANE-STAFF","weaponSprite":"staff"},"Assassin":{"assetId":"CHR-ASS-IDLE","asset":"assets/hero-assassin.svg","weaponId":"EQ-WPN-TWIN-BLADES","weaponSprite":"dual_blade"}},
+  "equipment":{"weapons":["EQ-WPN-LONG-SWORD","EQ-WPN-HUNTER-BOW","EQ-WPN-ARCANE-STAFF","EQ-WPN-TWIN-BLADES"],"armor":["EQ-ARM-LEATHER","EQ-ARM-KNIGHT"],"accessories":["EQ-RING-RUBY"]},
+  "items":["ITM-HP-POTION","ITM-MP-POTION"],
+  "monsters":["MON-GOB","MON-WOLF","MON-GOL","MON-DKN"],
+  "runtime":{"loader":"spec-runtime.js","main":"app.js","animation":"animation.js","compatibility":"phaseC.js","entry":"index.html","saveKey":"mma-rpg-save-v2"},
+  "docs":{"designSpecMarkdown":"docs/MMA-RPG-V2-DESIGN-SPEC.md","machineSpec":"data/game-spec.json"}
 }
