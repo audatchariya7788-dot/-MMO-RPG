@@ -18,7 +18,7 @@
   function switchClass(id){localStorage.setItem(PENDING,id);localStorage.setItem(KEY,id);location.reload();}
   function render(){
     const host=document.getElementById('characterView'); if(!host)return;
-    const id=current(),c=CLASSES[id],h=heroData(),exp=Math.max(0,Math.min(100,Math.round((h.exp??sample.exp)/(h.maxExp??sample.maxExp)*100)));
+    const id=current(),c=CLASSES[id]||CLASSES.Warrior,h=heroData(),exp=Math.max(0,Math.min(100,Math.round((h.exp??sample.exp)/(h.maxExp??sample.maxExp)*100)));
     host.innerHTML=`<div class="cv3">
       <div class="cv3-classbar"><div class="cv3-title"><span>⚔</span><div><h2>Hero Class & Weapon</h2><p>เลือกอาชีพเพื่อเปลี่ยนโมเดล อาวุธ ค่าสถานะ และข้อมูลที่ใช้ใน Battle</p></div></div><div class="cv3-classcards">${Object.entries(CLASSES).map(([k,x])=>`<button class="cv3-class ${k===id?'selected':''}" data-c="${k}">${img(x)}<strong>${k}</strong><small>${x.weapon}</small><em>${x.bonus}</em></button>`).join('')}</div></div>
       <div class="cv3-main">
@@ -32,11 +32,17 @@
     host.querySelectorAll('[data-c]').forEach(b=>b.addEventListener('click',()=>switchClass(b.dataset.c)));
   }
   function boot(){
-    const pending=localStorage.getItem(PENDING);
-    if(pending){localStorage.removeItem(PENDING);setTimeout(()=>document.querySelector(`.phasec-class[data-class="${pending}"]`)?.click(),80);}
     const host=document.getElementById('characterView'); if(!host)return;
     const obs=new MutationObserver(()=>{if(host.querySelector('.phasec-character-complete'))render();});obs.observe(host,{childList:true,subtree:true});
-    if(host.innerHTML.trim()) render();
+    const pending=localStorage.getItem(PENDING);
+    if(pending){
+      localStorage.removeItem(PENDING);
+      setTimeout(()=>{
+        const original=document.querySelector(`.phasec-class[data-class="${pending}"]`);
+        if(original) original.click();
+        setTimeout(render,120);
+      },60);
+    } else if(host.innerHTML.trim()) render();
   }
   document.addEventListener('DOMContentLoaded',boot);
   window.MMACharacterV3={render,switchClass,CLASSES};
