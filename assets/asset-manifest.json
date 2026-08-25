@@ -1,9 +1,10 @@
 {
-  "version":"phase-c-1.1",
+  "version":"phase-c-1.2",
   "grid":{"cell":32,"format":"SVG symbol sheet","sheet":"assets/sprite-sheet-32.svg"},
-  "heroModels":{"sheet":"assets/hero-class-models.svg","viewBox":"128x160","classes":{"Warrior":"warrior","Ranger":"ranger","Mage":"mage","Assassin":"assassin"}},
+  "heroModels":{"standalone":["assets/hero-warrior.svg","assets/hero-ranger.svg","assets/hero-mage.svg","assets/hero-assassin.svg"],"legacySheet":"assets/hero-class-models.svg","viewBox":"128x160","classes":{"Warrior":"warrior","Ranger":"ranger","Mage":"mage","Assassin":"assassin"}},
   "heroClasses":{"Warrior":{"idle":"warrior_idle","attack":"warrior_attack","model":"warrior","weapon":"sword_long"},"Ranger":{"idle":"ranger_idle","attack":"ranger_attack","model":"ranger","weapon":"bow"},"Mage":{"idle":"mage_idle","attack":"mage_cast","model":"mage","weapon":"staff"},"Assassin":{"idle":"assassin_idle","attack":"assassin_attack","model":"assassin","weapon":"dual_blade"}},
   "equipment":{"weapons":["sword_long","bow","staff","dual_blade"],"armor":["leather","knight","mage_robe","shadow_armor"],"accessories":["ring"]},
   "items":["potion"],
-  "runtime":{"loader":"phaseC.js","animation":"animation.js","entry":"index.html"}
+  "runtime":{"loader":"phaseC.js","animation":"animation.js","entry":"index.html","characterFallback":"assets/hero.svg"},
+  "docs":{"pipeline":"docs/character-pipeline.svg","designSpecMarkdown":"docs/CHARACTER_ASSET_DESIGN_SPEC.md","designSpecA4":"docs/CHARACTER_ASSET_DESIGN_SPEC_A4.html"}
 }
