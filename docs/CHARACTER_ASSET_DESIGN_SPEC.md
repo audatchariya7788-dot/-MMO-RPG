@@ -28,7 +28,7 @@ This document is the implementation guide for the character pipeline. The same s
 ## 2. Repository-aligned asset structure
 
 ```text
--MM0-RPG/
+-MMO-RPG/
 ├── index.html                 # [04] UI entry + runtime script loading
 ├── app.js                     # [05] core game state/render/combat
 ├── animation.js               # [05] animation/effects runtime
