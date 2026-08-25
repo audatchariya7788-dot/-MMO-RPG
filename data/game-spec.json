@@ -1,0 +1,34 @@
+{
+  "version": "2.1",
+  "game": "MMA : RPG",
+  "flow": ["boot", "menu", "world", "character", "equipment", "stats", "battle", "loot", "save"],
+  "uiTabs": ["world", "battle", "character", "inventory", "equipment", "stats", "monsters", "quests", "loot", "lab"],
+  "spriteGrid": {"logicalWidth": 32, "logicalHeight": 32, "origin": "top-left", "states": ["IDLE", "WALK", "RUN", "ATTACK", "SKILL", "HURT", "DEAD"]},
+  "classes": [
+    {"id":"CLASS-WARRIOR","assetId":"CHR-WAR-IDLE","asset":"assets/hero-warrior.svg","weaponId":"EQ-WPN-LONG-SWORD"},
+    {"id":"CLASS-RANGER","assetId":"CHR-RNG-IDLE","asset":"assets/hero-ranger.svg","weaponId":"EQ-WPN-HUNTER-BOW"},
+    {"id":"CLASS-MAGE","assetId":"CHR-MAG-IDLE","asset":"assets/hero-mage.svg","weaponId":"EQ-WPN-ARCANE-STAFF"},
+    {"id":"CLASS-ASSASSIN","assetId":"CHR-ASS-IDLE","asset":"assets/hero-assassin.svg","weaponId":"EQ-WPN-TWIN-BLADES"}
+  ],
+  "fallback": {"assetId":"CHR-FALLBACK","asset":"assets/hero.svg"},
+  "assets": [
+    {"id":"WPN-LS","symbol":"sword","grid":"32x32"},
+    {"id":"WPN-BOW","symbol":"bow","grid":"32x32"},
+    {"id":"WPN-STAFF","symbol":"staff","grid":"32x32"},
+    {"id":"WPN-DUAL","symbol":"dual_blade","grid":"32x32"},
+    {"id":"MON-GOB","file":"assets/goblin.svg","grid":"32x32"},
+    {"id":"MON-WOLF","symbol":"wolf","grid":"32x32"},
+    {"id":"MON-GOL","file":"assets/golem.svg","grid":"32x32"},
+    {"id":"MON-DKN","file":"assets/knight.svg","grid":"32x32"}
+  ],
+  "phases": [
+    {"id":1,"name":"Runtime foundation","acceptance":["boot", "menu", "single-renderer"]},
+    {"id":2,"name":"Character + Equipment","acceptance":["class-switch", "equipment-stats"]},
+    {"id":3,"name":"Asset integration","acceptance":["asset-id", "32x32-contract", "fallback"]},
+    {"id":4,"name":"World + Quest","acceptance":["movement", "npc", "encounter", "quest"]},
+    {"id":5,"name":"Battle","acceptance":["attack", "skill", "heal", "potion", "run", "damage-breakdown"]},
+    {"id":6,"name":"Loot + Inventory","acceptance":["reward", "filter", "equip"]},
+    {"id":7,"name":"Save / Load + GM Lab","acceptance":["round-trip-save", "safe-normalize", "test-tools"]}
+  ],
+  "saveKey": "mma-rpg-save-v2"
+}
