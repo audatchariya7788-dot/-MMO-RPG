@@ -15,8 +15,10 @@
   const savedClass=()=>localStorage.getItem(key)||'Warrior';
   const currentClass=()=>CLASSES[savedClass()]||CLASSES.Warrior;
   const currentWeapon=()=>WEAPONS[currentClass().weapon];
-  const model=id=>`<svg class="hero-model hero-model-large" viewBox="0 0 128 160" preserveAspectRatio="xMidYMid meet"><use href="assets/hero-class-models.svg#${id}"></use></svg>`;
-  const sheet=id=>`<svg class="phasec-sprite" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet"><use href="assets/sprite-sheet-32.svg#${id}"></use></svg>`;
+  // Use standalone SVG files instead of external <use> references. This fixes
+  // browsers/Codespaces previews that do not render cross-file SVG symbols.
+  const model=id=>`<img class="hero-model hero-model-large" src="./assets/hero-${id}.svg?v=20260825d" alt="${id} hero" draggable="false">`;
+  const sheet=id=>`<svg class="phasec-sprite" viewBox="0 0 32 32" preserveAspectRatio="xMidYMid meet"><use href="./assets/sprite-sheet-32.svg#${id}"></use></svg>`;
   const statTotal=(c)=>c.stats;
 
   function switchClass(cls){
@@ -82,7 +84,7 @@
   function syncAllHeroModels(){
     const c=currentClass();
     document.documentElement.dataset.heroClass=savedClass();
-    document.querySelectorAll('.sprite-hero').forEach(el=>{
+    document.querySelectorAll('.sprite-hero,.character-sprite').forEach(el=>{
       const u=el.querySelector('use');
       if(u && el.closest('.characterView,.paperdoll,.hero-unit'))u.setAttribute('href',`assets/hero-class-models.svg#${c.model}`);
     });
