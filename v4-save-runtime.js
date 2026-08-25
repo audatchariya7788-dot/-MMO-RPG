@@ -1,31 +1,70 @@
 /* MMA : RPG V4 Save/Load Runtime
- * Normalizes the live state without replacing the existing core runtime.
+ * Bridges the existing core save (mma-rpg-save-v2) to a validated V4 backup.
+ * Does not replace app.js state ownership.
  */
 (function(){
-  const KEY='mma-rpg-save-v4';
-  const SLOTS=['head','armor','weapon','accessory','ring','boots'];
-  function normalize(){
-    const s=window.gameState||{};
-    s.equipment=s.equipment||{};
-    SLOTS.forEach(k=>{ if(!(k in s.equipment)) s.equipment[k]=null; });
+  'use strict';
+  const CORE_KEY='mma-rpg-save-v2';
+  const V4_KEY='mma-rpg-save-v4';
+  const SLOTS=['Head','Armor','Weapon','Accessory','Ring','Boots'];
+
+  function readCore(){
+    try{return JSON.parse(localStorage.getItem(CORE_KEY)||'null');}catch(e){return null;}
+  }
+  function normalize(state){
+    const s=(state&&typeof state==='object')?state:{};
+    s.hero=s.hero||{};
     s.inventory=Array.isArray(s.inventory)?s.inventory:[];
+    s.equipment=s.equipment||{};
+    SLOTS.forEach(k=>{if(!(k in s.equipment))s.equipment[k]=null;});
+    s.loot=Array.isArray(s.loot)?s.loot:[];
     s.lootHistory=Array.isArray(s.lootHistory)?s.lootHistory:[];
+    s.quests=s.quests||{};
+    s.version='2026-08-26-v4';
     return s;
   }
-  function save(){
-    const s=normalize();
-    localStorage.setItem(KEY,JSON.stringify({version:4,savedAt:new Date().toISOString(),state:s}));
+  function snapshot(){
+    const s=readCore();
+    if(!s)return null;
+    return normalize(JSON.parse(JSON.stringify(s)));
+  }
+  function saveV4(){
+    const state=snapshot();
+    if(!state)return false;
+    localStorage.setItem(V4_KEY,JSON.stringify({version:4,savedAt:new Date().toISOString(),state}));
     return true;
   }
-  function load(){
+  function restoreV4ToCore(){
     try{
-      const raw=localStorage.getItem(KEY); if(!raw)return false;
-      const payload=JSON.parse(raw); if(!payload||!payload.state)return false;
-      window.gameState=Object.assign(normalize(),payload.state);
-      window.dispatchEvent(new CustomEvent('mma:state-loaded',{detail:window.gameState}));
-      if(typeof window.renderAll==='function') window.renderAll();
+      const raw=localStorage.getItem(V4_KEY);if(!raw)return false;
+      const p=JSON.parse(raw);if(!p||!p.state)return false;
+      localStorage.setItem(CORE_KEY,JSON.stringify(normalize(p.state)));
       return true;
-    }catch(e){ console.error('[MMA Save]',e); return false; }
+    }catch(e){console.error('[MMA V4 Save]',e);return false;}
   }
-  window.MMA_SAVE_V4={key:KEY,normalize,save,load,has:()=>!!localStorage.getItem(KEY)};
+  function validate(){
+    const s=snapshot();
+    const errors=[];
+    if(!s)errors.push('No core save exists');
+    if(s&&!s.hero)errors.push('Missing hero');
+    if(s&&(!Array.isArray(s.inventory)))errors.push('Missing inventory');
+    if(s&&SLOTS.some(k=>!(k in s.equipment)))errors.push('Equipment slot contract incomplete');
+    return {valid:errors.length===0,version:4,errors};
+  }
+  function wire(){
+    const saveBtn=document.getElementById('saveBtn');
+    const loadBtn=document.getElementById('loadBtn');
+    if(saveBtn&&!saveBtn.dataset.v4wired){
+      saveBtn.addEventListener('click',()=>setTimeout(saveV4,50));
+      saveBtn.dataset.v4wired='1';
+    }
+    if(loadBtn&&!loadBtn.dataset.v4wired){
+      loadBtn.addEventListener('click',()=>{
+        if(localStorage.getItem(V4_KEY))restoreV4ToCore();
+      },{capture:true});
+      loadBtn.dataset.v4wired='1';
+    }
+    window.MMA_SAVE_V4={key:V4_KEY,coreKey:CORE_KEY,snapshot,save:saveV4,restore:restoreV4ToCore,validate,has:()=>!!localStorage.getItem(V4_KEY)};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(wire,1000));else setTimeout(wire,1000);
 })();
