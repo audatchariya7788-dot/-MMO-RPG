@@ -1,0 +1,18 @@
+{
+  "version":"character-v3",
+  "reference":"user-supplied Character UI reference",
+  "logicalSprite":{"width":32,"height":32,"grid":"32x32","origin":"top-left","source":"SVG"},
+  "ui":{"layout":"class-selection + hero-preview + equipment-paperdoll + stats + inventory + weapon-bonus","theme":"blue-gold pixel-RPG HUD"},
+  "assets":{"heroFallback":"assets/hero.svg","classes":{"Warrior":"assets/hero-warrior.svg","Ranger":"assets/hero-ranger.svg","Mage":"assets/hero-mage.svg","Assassin":"assets/hero-assassin.svg"},"weapons":{"Long Sword":"sword","Hunter Bow":"bow","Arcane Staff":"staff","Twin Blades":"dual_blade"}},
+  "classes":{
+    "Warrior":{"assetId":"CHR-WAR-IDLE","weaponId":"WPN-LS","weapon":"Long Sword","description":"สมดุล • STR / DEF","bonus":"STR +2 • DEF +1","stats":{"STR":28,"AGI":14,"INT":10,"VIT":20},"hp":320,"mp":120,"atkMin":52,"atkMax":60,"def":28,"crit":12,"dodge":5},
+    "Ranger":{"assetId":"CHR-RNG-IDLE","weaponId":"WPN-BOW","weapon":"Hunter Bow","description":"ความเร็ว • Critical","bonus":"AGI +2 • CRIT +1","stats":{"STR":20,"AGI":28,"INT":14,"VIT":20},"hp":280,"mp":110,"atkMin":48,"atkMax":56,"def":22,"crit":15,"dodge":10},
+    "Mage":{"assetId":"CHR-MAG-IDLE","weaponId":"WPN-STAFF","weapon":"Arcane Staff","description":"เวทมนตร์ • MP","bonus":"INT +2 • MP +20","stats":{"STR":12,"AGI":16,"INT":32,"VIT":18},"hp":230,"mp":220,"atkMin":44,"atkMax":52,"def":18,"crit":10,"dodge":6},
+    "Assassin":{"assetId":"CHR-ASS-IDLE","weaponId":"WPN-DUAL","weapon":"Twin Blades","description":"AGI สูง • โจมตีเร็ว","bonus":"AGI +2 • SPD +1","stats":{"STR":22,"AGI":34,"INT":12,"VIT":18},"hp":270,"mp":100,"atkMin":60,"atkMax":68,"def":20,"crit":18,"dodge":14}
+  },
+  "sampleProfile":{"level":12,"exp":480,"maxExp":1000,"gold":1250,"diamonds":120},
+  "equipmentSlots":["Head","Armor","Weapon","Accessory","Ring","Boots"],
+  "inventoryPreview":{"healthPotion":10,"manaPotion":8,"purplePotion":5,"questScroll":3,"gold":1250,"itemChest":2,"crystal":4,"herb":12},
+  "runtimeOrder":["Asset ID","Sprite 32x32","Equipment","Character UI","Battle"],
+  "validation":{"fallbackRequired":true,"allWeaponSymbolsRequired":["sword","bow","staff","dual_blade"],"noBrokenImageIcons":true}
+}
