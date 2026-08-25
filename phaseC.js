@@ -1,11 +1,10 @@
 /* Phase C compatibility layer
- * The unified runtime now owns all game state and rendering.
- * This file intentionally contains no second renderer, preventing Character UI
- * and asset state from fighting with app.js.
+ * Single source of truth: app.js owns game state.
+ * Character V3 is the visual layer; class changes must delegate to the unified runtime.
  */
 (() => {
   'use strict';
-  const VERSION = '2026-08-25-v2';
+  const VERSION = '2026-08-26-v3';
   const classes = {
     Warrior:{asset:'assets/hero-warrior.svg',weapon:'long_sword'},
     Ranger:{asset:'assets/hero-ranger.svg',weapon:'bow'},
@@ -19,10 +18,19 @@
     assetRoot: 'assets/',
     setClass(name){
       if (!classes[name]) return false;
-      localStorage.setItem('mma-rpg-class', name);
-      if (typeof window.render === 'function') window.render();
+      /* app.js is the authoritative state/runtime. */
+      if (window.MMACharacterSpec?.switchClass) {
+        window.MMACharacterSpec.switchClass(name);
+      } else {
+        localStorage.setItem('mma-rpg-class', name);
+        if (typeof window.render === 'function') window.render();
+      }
+      window.dispatchEvent(new CustomEvent('mma:character-changed', {detail:{className:name}}));
       return true;
     },
-    refresh(){ if (typeof window.render === 'function') window.render(); }
+    refresh(){
+      if (typeof window.render === 'function') window.render();
+      if (window.MMACharacterV3?.render) window.MMACharacterV3.render();
+    }
   };
 })();
