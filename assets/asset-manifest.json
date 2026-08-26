@@ -1,5 +1,5 @@
 {
-  "version":"mma-rpg-v5.0",
+  "version":"mma-rpg-v5.1",
   "grid":{"cell":32,"format":"SVG logical sprite grid","origin":"top-left"},
   "heroModels":{"standalone":["assets/hero-warrior.svg","assets/hero-ranger.svg","assets/hero-mage.svg","assets/hero-assassin.svg"],"fallback":"assets/hero.svg","classes":{"Warrior":"CHR-WAR-IDLE","Ranger":"CHR-RNG-IDLE","Mage":"CHR-MAG-IDLE","Assassin":"CHR-ASS-IDLE"}},
   "heroClasses":{
@@ -12,6 +12,7 @@
   "items":["ITM-HP-POTION","ITM-MP-POTION"],
   "monsters":["MON-GOB","MON-WOLF","MON-GOL","MON-DKN"],
   "spriteSymbols":["hero","goblin","wolf","golem","knight","sword","bow","staff","dual_blade","armor","ring","potion","gold","item","quest"],
-  "runtime":{"loader":"spec-runtime.js","main":"app.js","animation":"animation.js","compatibility":"phaseC.js","hotfix":"v5-runtime-hotfix.js","qa":"v5-runtime-qa.js","entry":"index.html","saveKey":"mma-rpg-save-v2"},
+  "spriteSources":{"runtimeAtlas":"assets/sprites.svg","gridSheet":"assets/sprite-sheet-32.svg","heroModels":"assets/hero-class-models.svg"},
+  "runtime":{"loader":"spec-runtime.js","main":"app.js","animation":"animation.js","compatibility":"phaseC.js","hotfix":"v5-runtime-hotfix.js","qa":"v5-runtime-qa.js","health":"v5-runtime-health.js","entry":"index.html","saveKey":"mma-rpg-save-v2"},
   "docs":{"designSpecMarkdown":"docs/MMA-RPG-V5-DESIGN-SPEC.md","machineSpec":"data/mma-rpg-v5-spec.json","phaseGuideSvg":"docs/MMA-RPG-V5-PHASE-GUIDE.svg"}
 }
