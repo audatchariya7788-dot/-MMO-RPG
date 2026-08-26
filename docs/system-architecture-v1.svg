@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#081426"/><stop offset="1" stop-color="#172b4d"/></linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#10233f"/><stop offset="1" stop-color="#183761"/></linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#61dafb"/></marker>
+    <style><![CDATA[
+      .title{font:700 34px Arial,sans-serif;fill:#fff}.subtitle{font:400 17px Arial,sans-serif;fill:#c7d5ea}.h{font:700 22px Arial,sans-serif;fill:#fff}.t{font:400 16px Arial,sans-serif;fill:#dbe8f7}.small{font:400 13px Arial,sans-serif;fill:#b7c8dc}.badge{font:700 14px Arial,sans-serif;fill:#081426}.box{fill:url(#panel);stroke:#4ea8de;stroke-width:2;rx:18}.cloud{fill:#0f2945;stroke:#8a7cff;stroke-width:2;rx:18}.flow{fill:#102947;stroke:#61dafb;stroke-width:2;rx:18}.chip{fill:#d8f3ff;rx:12}.line{stroke:#61dafb;stroke-width:3;fill:none;marker-end:url(#arrow)}
+    ]]></style>
+  </defs>
+  <rect width="1400" height="900" fill="url(#bg)"/>
+  <text x="70" y="62" class="title">MMA : RPG — System Architecture v1.0</text>
+  <text x="70" y="92" class="subtitle">Single-player RPG • Mobile-first Web Prototype • GitHub + Codespaces + Runtime QA</text>
+
+  <rect x="60" y="130" width="390" height="220" class="box"/>
+  <text x="85" y="165" class="h">1. Client / Presentation</text>
+  <text x="90" y="198" class="t">HTML5 + CSS + JavaScript</text>
+  <text x="90" y="228" class="t">Character / Inventory / Equipment UI</text>
+  <text x="90" y="258" class="t">Battle / Loot / Save &amp; Load screens</text>
+  <text x="90" y="290" class="small">Port 8000 • Codespaces forwarded port</text>
+  <rect x="325" y="185" width="95" height="38" class="chip"/><text x="345" y="210" class="badge">Mobile</text>
+
+  <rect x="505" y="130" width="390" height="220" class="cloud"/>
+  <text x="530" y="165" class="h">2. GitHub / Cloud Control</text>
+  <text x="530" y="198" class="t">Repository: audatchariya7788-dot/-MMO-RPG</text>
+  <text x="530" y="228" class="t">main branch • version control</text>
+  <text x="530" y="258" class="t">GitHub Actions Runtime QA</text>
+  <text x="530" y="288" class="t">Auto deploy / Codespaces configuration</text>
+
+  <rect x="950" y="130" width="390" height="220" class="box"/>
+  <text x="975" y="165" class="h">3. Asset Layer</text>
+  <text x="975" y="200" class="t">SVG class assets</text>
+  <text x="975" y="230" class="t">hero-warrior / ranger / mage / assassin</text>
+  <text x="975" y="260" class="t">sprites.svg + fallback hero.svg</text>
+  <text x="975" y="290" class="small">32×32 design target • normal SVG image loading</text>
+
+  <path d="M450 240 H505" class="line"/>
+  <path d="M895 240 H950" class="line"/>
+
+  <rect x="250" y="410" width="900" height="260" class="flow"/>
+  <text x="290" y="450" class="h">4. Runtime / Game Logic</text>
+
+  <rect x="290" y="480" width="250" height="75" class="box"/><text x="315" y="510" class="h">Character State</text><text x="315" y="538" class="small">4 classes + HP/MP + base stats</text>
+  <rect x="575" y="480" width="250" height="75" class="box"/><text x="610" y="510" class="h">Equipment</text><text x="610" y="538" class="small">Weapon / Armor / Ring / slots</text>
+  <rect x="860" y="480" width="250" height="75" class="box"/><text x="895" y="510" class="h">Derived Stats</text><text x="895" y="538" class="small">ATK / DEF / CRIT / HIT / DODGE</text>
+
+  <path d="M540 518 H575" class="line"/><path d="M825 518 H860" class="line"/>
+
+  <rect x="290" y="585" width="250" height="55" class="box"/><text x="355" y="620" class="h">Battle / Damage</text>
+  <rect x="575" y="585" width="250" height="55" class="box"/><text x="655" y="620" class="h">Loot</text>
+  <rect x="860" y="585" width="250" height="55" class="box"/><text x="950" y="620" class="h">Inventory</text>
+  <path d="M415 555 V585" class="line"/><path d="M700 555 V585" class="line"/><path d="M985 555 V585" class="line"/>
+
+  <rect x="170" y="735" width="320" height="105" class="cloud"/>
+  <text x="200" y="770" class="h">5. Persistence</text>
+  <text x="200" y="800" class="t">LocalStorage • mma-rpg-save-v2</text>
+  <text x="200" y="825" class="small">Save / Load validated in live runtime</text>
+
+  <rect x="540" y="735" width="320" height="105" class="cloud"/>
+  <text x="570" y="770" class="h">6. QA / Release Gate</text>
+  <text x="570" y="800" class="t">Runtime QA • Asset QA • Battle QA</text>
+  <text x="570" y="825" class="small">Character → Equipment → Battle → Loot → Save/Load</text>
+
+  <rect x="910" y="735" width="320" height="105" class="cloud"/>
+  <text x="940" y="770" class="h">7. Deployment</text>
+  <text x="940" y="800" class="t">GitHub main → Codespaces / Web Runtime</text>
+  <text x="940" y="825" class="small">Auto-start + public forwarded port 8000</text>
+
+  <path d="M400 670 V735" class="line"/><path d="M700 670 V735" class="line"/><path d="M1000 670 V735" class="line"/>
+
+  <rect x="60" y="350" width="135" height="45" class="chip"/><text x="85" y="379" class="badge">Phase 1–7 QA Baseline</text>
+</svg>
