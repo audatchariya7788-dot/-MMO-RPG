@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+<rect width="1800" height="1200" fill="#050b16"/>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#102c50"/><stop offset="1" stop-color="#071321"/></linearGradient><style>
+.t{font-family:Arial,sans-serif}.title{font:700 52px Arial;fill:#ffd447}.sub{font:600 22px Arial;fill:#dbeafe}.h{font:700 26px Arial;fill:#fff}.txt{font:500 18px Arial;fill:#cbd5e1}.id{font:700 16px monospace;fill:#67e8f9}.ok{font:700 17px Arial;fill:#86efac}.phase{font:800 21px Arial;fill:#ffd447}
+</style></defs>
+<rect x="35" y="28" width="1730" height="125" rx="24" fill="url(#bg)" stroke="#38bdf8" stroke-width="3"/>
+<text x="900" y="82" text-anchor="middle" class="title">MMA : RPG V5 — FINAL DESIGN / IMPLEMENTATION GUIDE</text>
+<text x="900" y="120" text-anchor="middle" class="sub">Runtime V5 • Asset IDs • 32×32 Grid • Data Flow • Phase 1–7</text>
+
+<!-- canonical runtime -->
+<text x="900" y="205" text-anchor="middle" class="h">CANONICAL RUNTIME FLOW</text>
+<g class="t">
+<g transform="translate(55,235)"><rect width="185" height="82" rx="14" fill="#12355d" stroke="#38bdf8"/><text x="92" y="35" text-anchor="middle" class="h">BOOT</text><text x="92" y="62" text-anchor="middle" class="id">SYS-RUNTIME</text></g>
+<text x="248" y="285" class="title">→</text>
+<g transform="translate(275,235)"><rect width="185" height="82" rx="14" fill="#12355d" stroke="#38bdf8"/><text x="92" y="35" text-anchor="middle" class="h">WORLD</text><text x="92" y="62" text-anchor="middle" class="id">MAP-*</text></g>
+<text x="468" y="285" class="title">→</text>
+<g transform="translate(495,235)"><rect width="185" height="82" rx="14" fill="#153d61" stroke="#22d3ee"/><text x="92" y="35" text-anchor="middle" class="h">CHARACTER</text><text x="92" y="62" text-anchor="middle" class="id">CHR-*</text></g>
+<text x="688" y="285" class="title">→</text>
+<g transform="translate(715,235)"><rect width="185" height="82" rx="14" fill="#33205c" stroke="#a78bfa"/><text x="92" y="35" text-anchor="middle" class="h">EQUIPMENT</text><text x="92" y="62" text-anchor="middle" class="id">EQ-* / WPN-*</text></g>
+<text x="908" y="285" class="title">→</text>
+<g transform="translate(935,235)"><rect width="185" height="82" rx="14" fill="#283c20" stroke="#84cc16"/><text x="92" y="35" text-anchor="middle" class="h">STATS</text><text x="92" y="62" text-anchor="middle" class="id">STAT-V5</text></g>
+<text x="1128" y="285" class="title">→</text>
+<g transform="translate(1155,235)"><rect width="185" height="82" rx="14" fill="#551d2a" stroke="#fb7185"/><text x="92" y="35" text-anchor="middle" class="h">BATTLE</text><text x="92" y="62" text-anchor="middle" class="id">MON-* / FX-*</text></g>
+<text x="1348" y="285" class="title">→</text>
+<g transform="translate(1375,235)"><rect width="185" height="82" rx="14" fill="#174d36" stroke="#4ade80"/><text x="92" y="35" text-anchor="middle" class="h">LOOT</text><text x="92" y="62" text-anchor="middle" class="id">LOOT-* / ITM-*</text></g>
+<text x="1568" y="285" class="title">→</text>
+<g transform="translate(1595,235)"><rect width="170" height="82" rx="14" fill="#5b4217" stroke="#fbbf24"/><text x="85" y="35" text-anchor="middle" class="h">SAVE</text><text x="85" y="62" text-anchor="middle" class="id">SYS-SAVE</text></g>
+</g>
+
+<text x="900" y="365" text-anchor="middle" class="title">PHASE 1–7 • DEVELOPMENT GATES</text>
+<!-- cards -->
+<g transform="translate(45,400)"><rect width="540" height="205" rx="20" fill="url(#bg)" stroke="#38bdf8" stroke-width="2"/><text x="22" y="38" class="phase">PHASE 1 — RUNTIME FOUNDATION</text><text x="22" y="70" class="id">SYS-RUNTIME · SYS-SAVE</text><text x="22" y="108" class="txt">Boot / Menu / gameState / one renderer</text><text x="22" y="140" class="txt">NEW · CONTINUE · LOAD · normalize()</text><text x="22" y="178" class="ok">✓ Gate: no permanent Loading</text></g>
+<g transform="translate(630,400)"><rect width="540" height="205" rx="20" fill="url(#bg)" stroke="#a78bfa" stroke-width="2"/><text x="22" y="38" class="phase">PHASE 2 — CHARACTER + EQUIPMENT</text><text x="22" y="70" class="id">CHR-* · WPN-* · EQ-*</text><text x="22" y="108" class="txt">4 classes + signature weapons + 6 slots</text><text x="22" y="140" class="txt">Modifiers → derived stats → shared state</text><text x="22" y="178" class="ok">✓ Gate: class/equipment sync</text></g>
+<g transform="translate(1215,400)"><rect width="540" height="205" rx="20" fill="url(#bg)" stroke="#22d3ee" stroke-width="2"/><text x="22" y="38" class="phase">PHASE 3 — ASSET INTEGRATION</text><text x="22" y="70" class="id">ASSET-32X32 · CHR-FALLBACK</text><text x="22" y="108" class="txt">SVG source + 32×32 logical cell</text><text x="22" y="140" class="txt">Stable IDs + fallback-safe rendering</text><text x="22" y="178" class="ok">✓ Gate: no broken/local asset path</text></g>
+<g transform="translate(45,630)"><rect width="540" height="205" rx="20" fill="url(#bg)" stroke="#4ade80" stroke-width="2"/><text x="22" y="38" class="phase">PHASE 4 — WORLD + QUEST</text><text x="22" y="70" class="id">MAP-* · NPC-* · QUEST-*</text><text x="22" y="108" class="txt">Greenvale movement + NPC interaction</text><text x="22" y="140" class="txt">Encounter triggers + quest persistence</text><text x="22" y="178" class="ok">✓ Gate: movement / quest state persists</text></g>
+<g transform="translate(630,630)"><rect width="540" height="205" rx="20" fill="url(#bg)" stroke="#fb7185" stroke-width="2"/><text x="22" y="38" class="phase">PHASE 5 — BATTLE</text><text x="22" y="70" class="id">MON-* · FX-* · SKL-*</text><text x="22" y="108" class="txt">Attack · Skill · Heal · Potion · Run</text><text x="22" y="140" class="txt">Hit/Dodge → Crit → Damage → Victory</text><text x="22" y="178" class="ok">✓ Gate: shared formula + monster HP</text></g>
+<g transform="translate(1215,630)"><rect width="540" height="205" rx="20" fill="url(#bg)" stroke="#f59e0b" stroke-width="2"/><text x="22" y="38" class="phase">PHASE 6 — LOOT + INVENTORY</text><text x="22" y="70" class="id">LOOT-* · ITM-*</text><text x="22" y="108" class="txt">Victory → EXP + Gold + Item records</text><text x="22" y="140" class="txt">Receive → Filter → Equip</text><text x="22" y="178" class="ok">✓ Gate: loot reaches inventory</text></g>
+<g transform="translate(45,860)"><rect width="850" height="205" rx="20" fill="url(#bg)" stroke="#fbbf24" stroke-width="2"/><text x="22" y="38" class="phase">PHASE 7 — SAVE / LOAD + GM LAB</text><text x="22" y="70" class="id">SYS-SAVE · GM-*</text><text x="22" y="108" class="txt">mma-rpg-save-v2 full state round-trip</text><text x="22" y="140" class="txt">Class · Equipment · Inventory · Map · Quest · Loot</text><text x="22" y="178" class="ok">✓ Gate: normalize invalid save; GM tools test-only</text></g>
+<g transform="translate(930,860)"><rect width="825" height="205" rx="20" fill="#091827" stroke="#64748b" stroke-width="2"/><text x="22" y="38" class="phase">FINAL CONTRACT / HANDOFF</text><text x="22" y="70" class="id">data/mma-rpg-v5-spec.json</text><text x="22" y="108" class="txt">Character Asset → Sprite 32×32 → Equipment → Stats</text><text x="22" y="140" class="txt">→ Battle → Loot → Inventory → Save / Load</text><text x="22" y="178" class="ok">✓ Source of truth: V5 Runtime + Master Design Spec</text></g>
+<text x="900" y="1140" text-anchor="middle" class="sub">MMA : RPG V5 • Final Phase Guide • Use Asset IDs as the implementation contract</text>
+</svg>
