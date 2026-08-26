@@ -1,0 +1,1 @@
+Devcontainer auto-start hotfix is applied in the runtime design. The server should be started without killing an existing http.server 8000 process.
