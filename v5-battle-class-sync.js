@@ -1,71 +1,78 @@
 /* MMA : RPG V5 Battle Class Sync
- * Keeps the Battle hero visual aligned with the current Character class.
+ * Forces the Battle hero visual to use exactly the current Character class asset.
  */
 (function(){
   'use strict';
-  const VERSION='2026-08-26-v5-battlesync2';
+  const VERSION='2026-08-26-v5-battlesync3';
   const CLASS_KEY='mma-rpg-class';
 
-  function currentClass(){
-    const api=window.MMACharacterSpec;
+  function current(){
     const name=localStorage.getItem(CLASS_KEY)||'Warrior';
-    return {name, data:api?.CLASSES?.[name] || api?.CLASSES?.Warrior || null};
+    const api=window.MMACharacterSpec;
+    const data=api?.CLASSES?.[name]||api?.CLASSES?.Warrior;
+    return {name,data};
+  }
+
+  function buildHero(host,data){
+    if(!host||!data)return;
+    host.querySelectorAll('.sprite-hero,.hero-runtime-battle,.battle-hero,img.hero-runtime').forEach(el=>el.remove());
+    const wrap=document.createElement('div');
+    wrap.className='hero-runtime-battle battle-class-sync';
+    const img=document.createElement('img');
+    img.className='hero-runtime battle-hero';
+    img.src=`assets/${data.asset}?v=${VERSION}`;
+    img.alt=`${data.label} hero`;
+    img.draggable=false;
+    img.onerror=function(){this.onerror=null;this.src=`assets/hero.svg?v=${VERSION}`;};
+    wrap.appendChild(img);
+    host.appendChild(wrap);
+    const unitName=host.querySelector('.unit-name');
+    if(unitName){
+      const level=unitName.querySelector('#heroLevel');
+      Array.from(unitName.childNodes).forEach(n=>{if(n.nodeType===3)n.remove();});
+      unitName.insertBefore(document.createTextNode(`${data.label} `),unitName.firstChild||null);
+      if(level) level.textContent=level.textContent||'Lv.1';
+    }
   }
 
   function sync(){
-    const {name,c}=(()=>{const x=currentClass();return {name:x.name,c:x.data};})();
-    if(!c)return;
-
-    // Force the core renderer to rebuild the Battle hero after a class change.
-    const heroHost=document.querySelector('#battle .hero-unit');
-    if(heroHost){
-      const old=heroHost.querySelector('.hero-runtime-battle, .sprite-hero');
-      if(old){
-        const current=old.querySelector?.('img.hero-runtime')||old;
-        const wanted=`assets/${c.asset}?v=${VERSION}`;
-        if(current.tagName==='IMG'){
-          if(current.getAttribute('src')!==wanted){
-            current.setAttribute('src',wanted);
-            current.setAttribute('alt',`${c.label} hero`);
-          }
-        }else if(window.render){
-          try{ window.render(); }catch(e){}
-        }
+    const {name,data}=current();
+    if(!data)return;
+    const host=document.querySelector('#battle .hero-unit');
+    if(host){
+      buildHero(host,data);
+      const battle=document.querySelector('#battle');
+      if(battle){
+        battle.dataset.mmaClass=name;
+        battle.dataset.mmaWeapon=data.weapon||'';
       }
-      const img=heroHost.querySelector('img.hero-runtime');
-      if(img){
-        img.src=`assets/${c.asset}?v=${VERSION}`;
-        img.alt=`${c.label} hero`;
-      }
-      const unitName=heroHost.querySelector('.unit-name');
-      if(unitName){
-        const levelEl=unitName.querySelector('#heroLevel');
-        unitName.childNodes[0].textContent=`${c.label} `;
-        if(levelEl && !levelEl.textContent) levelEl.textContent='Lv.1';
-      }
-    }
-
-    // Make the currently equipped/class signature weapon visible in Battle metadata when available.
-    const battleRoot=document.querySelector('#battle');
-    if(battleRoot){
-      battleRoot.dataset.mmaClass=name;
-      battleRoot.dataset.mmaWeapon=c.weapon||'';
     }
   }
 
-  let last=localStorage.getItem(CLASS_KEY)||'Warrior';
-  const check=()=>{
-    const now=localStorage.getItem(CLASS_KEY)||'Warrior';
-    if(now!==last){
-      last=now;
-      setTimeout(()=>{
-        try{window.render?.();}catch(e){}
-        setTimeout(sync,40);
-      },0);
-    } else sync();
-  };
+  function patchRender(){
+    if(typeof window.render!=='function' || window.render.__mmaV5BattlePatched)return;
+    const original=window.render;
+    function wrapped(){
+      const out=original.apply(this,arguments);
+      setTimeout(sync,0);
+      return out;
+    }
+    wrapped.__mmaV5BattlePatched=true;
+    window.render=wrapped;
+  }
 
-  setInterval(check,200);
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{try{window.render?.();}catch(e){};sync();},500));
-  window.MMA_V5_BATTLE_SYNC={sync};
+  document.addEventListener('DOMContentLoaded',()=>{
+    patchRender();
+    setTimeout(sync,250);
+    setTimeout(sync,1000);
+  });
+
+  let last=localStorage.getItem(CLASS_KEY)||'Warrior';
+  setInterval(()=>{
+    patchRender();
+    const now=localStorage.getItem(CLASS_KEY)||'Warrior';
+    if(now!==last){last=now;setTimeout(sync,20);setTimeout(sync,120);}
+  },200);
+
+  window.MMA_V5_BATTLE_SYNC={sync,patchRender};
 })();
