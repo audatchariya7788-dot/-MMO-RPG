@@ -1,0 +1,45 @@
+{
+  "version": "5.0",
+  "status": "runtime-qa-pass",
+  "game": "MMA : RPG",
+  "canonicalFlow": ["boot", "menu", "world", "character", "equipment", "stats", "battle", "loot", "inventory", "save"],
+  "runtimeTabs": ["world", "battle", "character", "inventory", "equipment", "stats", "monsters", "quests", "loot", "lab"],
+  "spriteContract": {
+    "logicalWidth": 32,
+    "logicalHeight": 32,
+    "origin": "top-left",
+    "states": ["IDLE", "WALK", "RUN", "ATTACK", "SKILL", "HURT", "DEAD"]
+  },
+  "classes": [
+    {"id":"CLASS-WARRIOR","assetId":"CHR-WAR-IDLE","asset":"assets/hero-warrior.svg","weaponId":"EQ-WPN-LONG-SWORD","weaponAssetId":"WPN-LS","weaponSymbol":"sword"},
+    {"id":"CLASS-RANGER","assetId":"CHR-RNG-IDLE","asset":"assets/hero-ranger.svg","weaponId":"EQ-WPN-HUNTER-BOW","weaponAssetId":"WPN-BOW","weaponSymbol":"bow"},
+    {"id":"CLASS-MAGE","assetId":"CHR-MAG-IDLE","asset":"assets/hero-mage.svg","weaponId":"EQ-WPN-ARCANE-STAFF","weaponAssetId":"WPN-STAFF","weaponSymbol":"staff"},
+    {"id":"CLASS-ASSASSIN","assetId":"CHR-ASS-IDLE","asset":"assets/hero-assassin.svg","weaponId":"EQ-WPN-TWIN-BLADES","weaponAssetId":"WPN-DUAL","weaponSymbol":"dual_blade"}
+  ],
+  "fallback": {"assetId":"CHR-FALLBACK","asset":"assets/hero.svg"},
+  "equipmentSlots": ["Head", "Armor", "Weapon", "Accessory", "Ring", "Boots"],
+  "equipmentIds": ["EQ-WPN-LONG-SWORD", "EQ-WPN-HUNTER-BOW", "EQ-WPN-ARCANE-STAFF", "EQ-WPN-TWIN-BLADES", "EQ-ARM-LEATHER", "EQ-ARM-KNIGHT", "EQ-RING-RUBY"],
+  "itemIds": ["ITM-HP-POTION", "ITM-MP-POTION"],
+  "monsterAssets": [
+    {"id":"MON-GOB","asset":"assets/goblin.svg","symbol":"goblin"},
+    {"id":"MON-WOLF","asset":"assets/sprites.svg","symbol":"wolf"},
+    {"id":"MON-GOL","asset":"assets/golem.svg","symbol":"golem"},
+    {"id":"MON-DKN","asset":"assets/knight.svg","symbol":"knight"}
+  ],
+  "spriteSymbols": ["hero", "goblin", "wolf", "golem", "knight", "sword", "bow", "staff", "dual_blade", "armor", "ring", "potion", "gold", "item", "quest"],
+  "saveKey": "mma-rpg-save-v2",
+  "qa": {
+    "requiredGlobals": ["gameState", "MMA_LOOT_V4", "MMA_LOOT_TABLES_V4", "MMA_LOOT_PROGRESSION_V4", "MMA_BATTLE_LOOT_V4"],
+    "requiredState": ["inventory-array", "equipment-object", "save-key"],
+    "expected": "PASS"
+  },
+  "phases": [
+    {"id":1,"name":"Runtime Foundation","assetIds":["SYS-RUNTIME","SYS-SAVE"],"acceptance":["boot","menu","single-renderer","safe-state"]},
+    {"id":2,"name":"Character + Equipment","assetIds":["CHR-WAR-IDLE","CHR-RNG-IDLE","CHR-MAG-IDLE","CHR-ASS-IDLE","WPN-LS","WPN-BOW","WPN-STAFF","WPN-DUAL","EQ-ARM-LEATHER","EQ-ARM-KNIGHT","EQ-RING-RUBY"],"acceptance":["class-switch","sprite-sync","equipment-slots","derived-stats"]},
+    {"id":3,"name":"Asset Integration","assetIds":["ASSET-32X32","CHR-FALLBACK"],"acceptance":["stable-id","32x32-contract","fallback","no-broken-path"]},
+    {"id":4,"name":"World + Quest","assetIds":["MAP-*","NPC-*","QUEST-*"],"acceptance":["movement","npc","encounter","quest-progress"]},
+    {"id":5,"name":"Battle","assetIds":["MON-GOB","MON-WOLF","MON-GOL","MON-DKN","FX-*","SKL-*"],"acceptance":["attack","skill","heal","potion","run","damage-breakdown"]},
+    {"id":6,"name":"Loot + Inventory","assetIds":["LOOT-*","ITM-HP-POTION","ITM-MP-POTION"],"acceptance":["reward","inventory-receive","filter","equip"]},
+    {"id":7,"name":"Save / Load + GM Lab","assetIds":["SYS-SAVE","GM-*"],"acceptance":["round-trip","normalize","test-tools"]}
+  ]
+}
