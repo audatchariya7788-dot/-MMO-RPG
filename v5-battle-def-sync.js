@@ -1,5 +1,6 @@
 /* MMA : RPG V5 Battle DEF Sync
- * Aligns Battle Damage Breakdown DEF with the exact derived character defense.
+ * Aligns Battle Damage Breakdown with the exact derived character defense
+ * while preserving Monster DEF as a separate value.
  */
 (function(){
   'use strict';
@@ -25,9 +26,20 @@
     if(!host)return;
     const exact=getCoreDefense();
     if(exact===null)return;
-    const entries=[...host.querySelectorAll('.stat')];
-    const row=entries.find(x=>x.querySelector('span')?.textContent?.trim()==='DEF');
-    if(row)row.querySelector('b').textContent=String(exact);
+    const rows=[...host.querySelectorAll('.stat')];
+    const monster=rows.find(x=>x.querySelector('span')?.textContent?.trim()==='Monster DEF');
+    if(monster){
+      let hero=rows.find(x=>x.dataset.mmaHeroDef==='1');
+      if(!hero){
+        hero=document.createElement('div');
+        hero.className='stat';
+        hero.dataset.mmaHeroDef='1';
+        hero.innerHTML='<span>Hero DEF</span><b></b>';
+        monster.insertAdjacentElement('afterend',hero);
+      }
+      const b=hero.querySelector('b');
+      if(b)b.textContent=String(exact);
+    }
   }
   document.addEventListener('DOMContentLoaded',()=>setTimeout(sync,900));
   setInterval(sync,300);
