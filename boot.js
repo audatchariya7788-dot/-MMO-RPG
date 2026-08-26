@@ -1,22 +1,37 @@
 (() => {
-  // MMA : RPG emergency boot guard.
-  // Keeps the loading screen from trapping the player when a runtime module
-  // fails or when a cached/slow Codespaces asset delays initialization.
+  // MMA : RPG emergency boot guard + V5 runtime health bootstrap.
   const hide = el => el && el.classList.add('hidden');
   const show = el => el && el.classList.remove('hidden');
 
+  function installRuntimeHealth() {
+    if (!document.querySelector('link[data-mma-favicon]')) {
+      const link = document.createElement('link');
+      link.rel = 'icon';
+      link.type = 'image/svg+xml';
+      link.href = './assets/favicon.svg?v=20260826v1';
+      link.dataset.mmaFavicon = '1';
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-mma-health]')) {
+      const s = document.createElement('script');
+      s.src = './v5-runtime-health.js?v=20260826health1';
+      s.async = false;
+      s.dataset.mmaHealth = '1';
+      document.head.appendChild(s);
+    }
+  }
+
   function wire() {
+    installRuntimeHealth();
     const loading = document.getElementById('loading');
     const menu = document.getElementById('menu');
     const game = document.getElementById('game');
 
-    // If the normal application boot completed, do not interfere.
     if (game && !game.classList.contains('hidden')) {
       hide(loading);
       return true;
     }
 
-    // Release the loading screen and expose the main menu.
     hide(loading);
     show(menu);
 
@@ -37,17 +52,13 @@
     bind('saveBtn', 'save');
     bind('loadBtn', 'load');
 
-    // If app.js is healthy, render the menu state. If not, show a useful
-    // diagnostic instead of leaving the browser on an infinite loading page.
     if (typeof window.render === 'function') {
       try { window.render(); } catch (_) {}
       return true;
     }
-
     return false;
   }
 
-  // Give the normal scripts a moment, then guarantee a usable screen.
   window.addEventListener('load', () => {
     setTimeout(wire, 250);
     setTimeout(() => {
