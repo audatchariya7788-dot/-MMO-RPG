@@ -46,6 +46,17 @@ jobs:
           set -euo pipefail
           test -d assets || { echo 'Missing assets/ directory'; exit 1; }
           test -d data || { echo 'Missing data/ directory'; exit 1; }
+          test -f data/game-catalog.js || { echo 'Missing data/game-catalog.js'; exit 1; }
+
+      - name: Validate canonical game catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'window.MMA_GAME_DATA' data/game-catalog.js
+          for token in 'warrior' 'ranger' 'mage' 'assassin' 'iron_sword' 'steel_sword' 'training_goblin' 'forest_wolf' 'stone_golem' 'dark_knight'; do
+            grep -q "${token}" data/game-catalog.js || { echo "Missing catalog entry: ${token}"; exit 1; }
+          done
+          grep -q 'data/game-catalog.js' index.html || { echo 'Catalog is not loaded by index.html'; exit 1; }
 
       - name: Check for accidental secrets
         shell: bash
