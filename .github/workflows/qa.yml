@@ -1,0 +1,72 @@
+name: QA
+
+on:
+  push:
+    branches: [main, qa-hardening]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            node --check "$file"
+          done < <(find . -type f -name '*.js' \
+            -not -path './node_modules/*' \
+            -not -path './.git/*' -print0)
+
+      - name: Validate required project files
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in index.html app.js game.js animation.js boot.js; do
+            test -f "$file" || { echo "Missing required file: $file"; exit 1; }
+          done
+
+      - name: Validate asset/data directories
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d assets || { echo 'Missing assets/ directory'; exit 1; }
+          test -d data || { echo 'Missing data/ directory'; exit 1; }
+          test -f data/game-catalog.js || { echo 'Missing data/game-catalog.js'; exit 1; }
+
+      - name: Validate canonical game catalog
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q 'window.MMA_GAME_DATA' data/game-catalog.js
+          for token in 'warrior' 'ranger' 'mage' 'assassin' 'iron_sword' 'steel_sword' 'training_goblin' 'forest_wolf' 'stone_golem' 'dark_knight'; do
+            grep -q "${token}" data/game-catalog.js || { echo "Missing catalog entry: ${token}"; exit 1; }
+          done
+          grep -q 'data/game-catalog.js' index.html || { echo 'Catalog is not loaded by index.html'; exit 1; }
+
+      - name: Check for accidental secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -RInE --exclude-dir=.git --exclude='*.map' \
+            '(AKIA[0-9A-Z]{16}|BEGIN (RSA|EC|OPENSSH) PRIVATE KEY|ghp_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,})' .; then
+            echo 'Potential secret detected in repository files.'
+            exit 1
+          fi
+
+      - name: QA summary
+        run: echo 'QA checks passed.'

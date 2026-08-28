@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "6.0",
+  "classes": [
+    {
+      "id": "warrior",
+      "name": "Warrior",
+      "assetId": "CHR-WAR-IDLE",
+      "weaponId": "iron_sword",
+      "sprite": "hero"
+    },
+    {
+      "id": "ranger",
+      "name": "Ranger",
+      "assetId": "CHR-RNG-IDLE",
+      "weaponId": "hunter_bow",
+      "sprite": "hero"
+    },
+    {
+      "id": "mage",
+      "name": "Mage",
+      "assetId": "CHR-MAG-IDLE",
+      "weaponId": "arcane_staff",
+      "sprite": "hero"
+    },
+    {
+      "id": "assassin",
+      "name": "Assassin",
+      "assetId": "CHR-ASS-IDLE",
+      "weaponId": "twin_blades",
+      "sprite": "hero"
+    }
+  ],
+  "items": [
+    {
+      "id": "iron_sword",
+      "name": "Iron Sword",
+      "type": "Weapon",
+      "rarity": "Common",
+      "stats": {
+        "atk": 18,
+        "str": 4
+      }
+    },
+    {
+      "id": "steel_sword",
+      "name": "Steel Sword",
+      "type": "Weapon",
+      "rarity": "Rare",
+      "stats": {
+        "atk": 31,
+        "str": 8,
+        "crit": 2
+      }
+    },
+    {
+      "id": "leather_armor",
+      "name": "Leather Armor",
+      "type": "Armor",
+      "rarity": "Common",
+      "stats": {
+        "def": 12,
+        "vit": 3
+      }
+    },
+    {
+      "id": "knight_armor",
+      "name": "Knight Armor",
+      "type": "Armor",
+      "rarity": "Rare",
+      "stats": {
+        "def": 28,
+        "vit": 9
+      }
+    },
+    {
+      "id": "ruby_ring",
+      "name": "Ruby Ring",
+      "type": "Ring",
+      "rarity": "Epic",
+      "stats": {
+        "atk": 10,
+        "int": 8,
+        "crit": 4
+      }
+    },
+    {
+      "id": "health_potion",
+      "name": "Health Potion",
+      "type": "Consumable",
+      "rarity": "Common",
+      "stats": {
+        "heal": 80
+      }
+    }
+  ],
+  "monsters": [
+    {
+      "id": "training_goblin",
+      "name": "Training Goblin",
+      "level": 8,
+      "hp": 180,
+      "stats": {
+        "str": 17,
+        "def": 9,
+        "agi": 10
+      },
+      "sprite": "goblin",
+      "reward": {
+        "exp": 35,
+        "gold": 40
+      }
+    },
+    {
+      "id": "forest_wolf",
+      "name": "Forest Wolf",
+      "level": 10,
+      "hp": 230,
+      "stats": {
+        "str": 22,
+        "def": 12,
+        "agi": 20
+      },
+      "sprite": "wolf",
+      "reward": {
+        "exp": 45,
+        "gold": 55
+      }
+    },
+    {
+      "id": "stone_golem",
+      "name": "Stone Golem",
+      "level": 12,
+      "hp": 360,
+      "stats": {
+        "str": 30,
+        "def": 24,
+        "agi": 5
+      },
+      "sprite": "golem",
+      "reward": {
+        "exp": 70,
+        "gold": 90
+      }
+    },
+    {
+      "id": "dark_knight",
+      "name": "Dark Knight",
+      "level": 15,
+      "hp": 480,
+      "stats": {
+        "str": 38,
+        "def": 30,
+        "agi": 18
+      },
+      "sprite": "knight",
+      "reward": {
+        "exp": 110,
+        "gold": 140
+      }
+    }
+  ],
+  "equipmentSlots": [
+    "Head",
+    "Armor",
+    "Weapon",
+    "Accessory",
+    "Ring",
+    "Boots"
+  ],
+  "spriteStates": [
+    "IDLE",
+    "WALK",
+    "RUN",
+    "ATTACK",
+    "SKILL",
+    "HURT",
+    "DEAD"
+  ],
+  "saveKey": "mma-rpg-save-v2"
+}
