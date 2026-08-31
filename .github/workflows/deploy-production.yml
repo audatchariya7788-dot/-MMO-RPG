@@ -3,6 +3,8 @@ name: deploy-production
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     tags:
       - "v*"
 
@@ -16,16 +18,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Validate JavaScript
         shell: bash
         run: |
           set -euo pipefail
-          for f in app.js game.js animation.js boot.js character-v3.js; do
+          for f in app.js game.js animation.js boot.js character-v3.js data/game-catalog.js; do
             test -f "$f"
             node --check "$f"
           done
-
       - name: Validate canonical data
         shell: bash
         run: |
@@ -34,7 +34,12 @@ jobs:
           test -f data/game-catalog.v6.json
           grep -q 'window.MMA_GAME_DATA' data/game-catalog.js
           grep -q 'data/game-catalog.js' index.html
-
+          node -e "const fs=require('fs'); const d=JSON.parse(fs.readFileSync('data/game-catalog.v6.json','utf8')); if(d.schemaVersion!=='6.0.0'||d.items.length<8||d.monsters.length<4) process.exit(1);"
+      - name: Validate Wrangler config
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f wrangler.jsonc
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:

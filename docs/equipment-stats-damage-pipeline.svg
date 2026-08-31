@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#081526"/>
+<text x="800" y="70" text-anchor="middle" fill="#ffd45a" font-family="Arial" font-size="40" font-weight="700">MMA : RPG — CORE RUNTIME PIPELINE</text>
+<text x="800" y="110" text-anchor="middle" fill="#b7c9df" font-family="Arial" font-size="22">Inventory → Equipment → Stats → Damage Calculation → Battle → Loot → Save</text>
+<g font-family="Arial">
+<g transform="translate(70 190)"><rect width="300" height="220" rx="22" fill="#102d4e" stroke="#2586e8" stroke-width="3"/><text x="150" y="58" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">1. INVENTORY</text><text x="25" y="110" fill="#dcecff" font-size="20">Ownership / item catalog</text><text x="25" y="145" fill="#a9c6e6" font-size="18">Weapon • Armor • Ring</text><text x="25" y="178" fill="#a9c6e6" font-size="18">Consumables • Rarity</text></g>
+<g transform="translate(440 190)"><rect width="300" height="220" rx="22" fill="#102d4e" stroke="#2586e8" stroke-width="3"/><text x="150" y="58" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">2. EQUIPMENT</text><text x="25" y="110" fill="#dcecff" font-size="20">Paper Doll / slots</text><text x="25" y="145" fill="#a9c6e6" font-size="18">Equip / Unequip</text><text x="25" y="178" fill="#a9c6e6" font-size="18">Weapon • Armor • Ring</text></g>
+<g transform="translate(810 190)"><rect width="300" height="220" rx="22" fill="#102d4e" stroke="#2586e8" stroke-width="3"/><text x="150" y="58" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">3. STATS</text><text x="150" y="110" text-anchor="middle" fill="#dcecff" font-size="20">Derived Stats</text><text x="150" y="145" text-anchor="middle" fill="#a9c6e6" font-size="18">ATK • DEF • CRIT</text><text x="150" y="178" text-anchor="middle" fill="#70c7ff" font-size="18">HIT • DODGE</text></g>
+<g transform="translate(1180 190)"><rect width="300" height="220" rx="22" fill="#102d4e" stroke="#2586e8" stroke-width="3"/><text x="150" y="58" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">4. DAMAGE</text><text x="25" y="110" fill="#dcecff" font-size="18">Hit → Critical → Final</text><text x="25" y="145" fill="#a9c6e6" font-size="17">Normal: ATK − DEF + RNG</text><text x="25" y="178" fill="#70c7ff" font-size="17">Power Slash: ATK×1.35−DEF</text></g>
+</g>
+<g stroke="#f4c95d" stroke-width="5" fill="none"><path d="M370 300h70"/><path d="M740 300h70"/><path d="M1110 300h70"/></g>
+<g fill="#f4c95d"><path d="M430 300l-18-12v24z"/><path d="M800 300l-18-12v24z"/><path d="M1170 300l-18-12v24z"/></g>
+<g font-family="Arial">
+<g transform="translate(270 500)"><rect width="300" height="210" rx="22" fill="#132b42" stroke="#32b875" stroke-width="3"/><text x="150" y="55" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">5. BATTLE</text><text x="25" y="105" fill="#dcecff" font-size="18">Attack • Skill • Heal</text><text x="25" y="140" fill="#a9c6e6" font-size="17">Dodge • Battle Log</text><text x="25" y="178" fill="#70e0a8" font-size="16">Stone Golem Lv.4</text></g>
+<g transform="translate(650 500)"><rect width="300" height="210" rx="22" fill="#132b42" stroke="#32b875" stroke-width="3"/><text x="150" y="55" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">6. LOOT</text><text x="25" y="105" fill="#dcecff" font-size="18">Victory → EXP / Gold</text><text x="25" y="140" fill="#a9c6e6" font-size="17">Weighted drops</text><text x="25" y="178" fill="#70e0a8" font-size="17">Loot → Inventory</text></g>
+<g transform="translate(1030 500)"><rect width="300" height="210" rx="22" fill="#132b42" stroke="#32b875" stroke-width="3"/><text x="150" y="55" text-anchor="middle" fill="#fff" font-size="28" font-weight="700">7. SAVE</text><text x="25" y="105" fill="#dcecff" font-size="18">mma-rpg-save-v2</text><text x="25" y="140" fill="#a9c6e6" font-size="17">V4 validated backup</text><text x="25" y="178" fill="#70e0a8" font-size="17">D1-ready persistence</text></g>
+</g>
+<g stroke="#32b875" stroke-width="5"><path d="M570 605h80"/><path d="M950 605h80"/></g>
+<g fill="#32b875"><path d="M640 605l-18-12v24z"/><path d="M1020 605l-18-12v24z"/></g>
+<rect x="180" y="775" width="1240" height="70" rx="18" fill="#0b1d33" stroke="#c9a33a" stroke-width="2"/>
+<text x="800" y="818" text-anchor="middle" fill="#ffd45a" font-family="Arial" font-size="22" font-weight="700">QA VERIFIED: Iron Sword ATK 74 → Steel Sword ATK 94 • Power Slash 75</text>
+</svg>
