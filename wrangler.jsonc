@@ -1,7 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "mma-rpg",
-  "compatibility_date": "2026-08-27",
+  "name": "mmo-rpg",
+  "main": "worker.js",
+  "compatibility_date": "2026-08-31",
   "assets": {
     "directory": "."
   }
